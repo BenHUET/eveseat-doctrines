@@ -1,0 +1,19 @@
+{
+    "name": "kassie/doctrines",
+    "description": "Doctrine manager for SeAT.",
+    "type": "seat-plugin",
+    "autoload": {
+        "psr-4": {
+            "Seat\\Kassie\\Doctrines\\": "src/"
+        }
+    },
+    "require": {
+        
+    },
+    "authors": [{
+        "name": "Kassie Yvo",
+        "email": "kassie.yvo@gmail.com"
+    }],
+    "license": "GPL-2.0",
+    "minimum-stability": "stable"
+}
