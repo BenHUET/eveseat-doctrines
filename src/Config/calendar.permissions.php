@@ -11,6 +11,8 @@ return [
 
 		'createDoctrine',
 		'updateDoctrineNotOwned',
-		'deleteDoctrineNotOwned'
+		'deleteDoctrineNotOwned',
+
+		'setup',
     ]
 ];

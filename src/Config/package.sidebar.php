@@ -47,6 +47,12 @@ return [
 						'permission' => 'doctrines.createFit'
 					]
 				]
+			],
+			[
+				'name'  => 'Settings',
+				'icon'  => 'fa-cog',
+				'route' => 'doctrine.index',
+				'permission' => 'doctrines.setup'
 			]
 		]
 	]
