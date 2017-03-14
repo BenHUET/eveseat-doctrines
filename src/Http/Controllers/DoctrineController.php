@@ -10,4 +10,9 @@ class DoctrineController extends Controller
 	{	
 		return view('doctrines::doctrine.index', []);
 	}
+
+	public function indexStore()
+	{
+		return view('doctrines::doctrine.create', []);
+	}
 }

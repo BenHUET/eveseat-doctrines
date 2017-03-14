@@ -9,8 +9,17 @@ Route::group([
 	Route::resource('doctrine', 'DoctrineController', [
 		'only' => ['index', 'show'],
 		'names' => [
-			'index' => 'doctrine.index'
-		]
+			'index' => 'doctrines.doctrine.index',
+			'show' => 'doctrines.doctrine.show'
+		],
+		'prefix' => 'doctrines'
+	]);
+
+	Route::get('create', [
+		'as' => 'doctrines.doctrine.indexStore',
+		'uses' => 'DoctrineController@indexStore',
+		'middleware' => 'bouncer:doctrines.createDoctrine',
+		'prefix' => 'doctrines'
 	]);
 
 });

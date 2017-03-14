@@ -11,19 +11,19 @@ return [
 			[
 				'name'  => 'Doctrines',
 				'icon'  => 'fa-cube',
-				'route' => 'doctrine.index',
+				'route' => 'doctrines.doctrine.index',
 				'permission' => 'doctrines.view',
 				'entries' => [
 					[
 						'name'  => 'All',
 						'icon'  => 'fa-th-list',
-						'route' => 'doctrine.index',
+						'route' => 'doctrines.doctrine.index',
 						'permission' => 'doctrines.view'
 					],
 					[
 						'name'  => 'Create',
 						'icon'  => 'fa-plus',
-						'route' => 'doctrine.index',
+						'route' => 'doctrines.doctrine.indexStore',
 						'permission' => 'doctrines.createDoctrine'
 					]
 				]
@@ -31,19 +31,19 @@ return [
 			[
 				'name'  => 'Fits',
 				'icon'  => 'fa-space-shuttle',
-				'route' => 'doctrine.index',
+				'route' => 'doctrines.doctrine.index',
 				'permission' => 'doctrines.view',
 				'entries' => [
 					[
 						'name'  => 'All',
 						'icon'  => 'fa-th-list',
-						'route' => 'doctrine.index',
+						'route' => 'doctrines.doctrine.index',
 						'permission' => 'doctrines.view'
 					],
 					[
 						'name'  => 'Create',
 						'icon'  => 'fa-plus',
-						'route' => 'doctrine.index',
+						'route' => 'doctrines.doctrine.index',
 						'permission' => 'doctrines.createFit'
 					]
 				]
@@ -51,7 +51,7 @@ return [
 			[
 				'name'  => 'Settings',
 				'icon'  => 'fa-cog',
-				'route' => 'doctrine.index',
+				'route' => 'doctrines.doctrine.index',
 				'permission' => 'doctrines.setup'
 			]
 		]
