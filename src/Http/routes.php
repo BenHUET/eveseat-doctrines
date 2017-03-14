@@ -6,20 +6,40 @@ Route::group([
 	'prefix' => 'doctrines'
 ], function () {
 
-	Route::resource('doctrine', 'DoctrineController', [
-		'only' => ['index', 'show'],
-		'names' => [
-			'index' => 'doctrines.doctrine.index',
-			'show' => 'doctrines.doctrine.show'
-		],
-		'prefix' => 'doctrines'
-	]);
+	// Doctrines
+	Route::group([
+		'prefix' => 'doctrine'
+	], function() {
 
-	Route::get('create', [
-		'as' => 'doctrines.doctrine.indexStore',
-		'uses' => 'DoctrineController@indexStore',
-		'middleware' => 'bouncer:doctrines.createDoctrine',
-		'prefix' => 'doctrines'
-	]);
+		Route::get('index', [
+			'as' => 'doctrines.doctrine.index',
+			'uses' => 'DoctrineController@index',
+		]);
+
+		Route::get('create', [
+			'as' => 'doctrines.doctrine.indexStore',
+			'uses' => 'DoctrineController@indexStore',
+			'middleware' => 'bouncer:doctrines.createDoctrine',
+		]);
+
+	});
+
+	// Fits
+	Route::group([
+		'prefix' => 'fit'
+	], function() {
+
+		Route::get('index', [
+			'as' => 'doctrines.fit.index',
+			'uses' => 'FitController@index',
+		]);
+
+		Route::get('create', [
+			'as' => 'doctrines.fit.indexStore',
+			'uses' => 'FitController@indexStore',
+			'middleware' => 'bouncer:doctrines.createFit',
+		]);
+
+	});
 
 });

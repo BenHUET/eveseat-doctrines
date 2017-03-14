@@ -31,19 +31,19 @@ return [
 			[
 				'name'  => 'Fits',
 				'icon'  => 'fa-space-shuttle',
-				'route' => 'doctrines.doctrine.index',
+				'route' => 'doctrines.fit.index',
 				'permission' => 'doctrines.view',
 				'entries' => [
 					[
 						'name'  => 'All',
 						'icon'  => 'fa-th-list',
-						'route' => 'doctrines.doctrine.index',
+						'route' => 'doctrines.fit.index',
 						'permission' => 'doctrines.view'
 					],
 					[
 						'name'  => 'Create',
 						'icon'  => 'fa-plus',
-						'route' => 'doctrines.doctrine.index',
+						'route' => 'doctrines.fit.indexStore',
 						'permission' => 'doctrines.createFit'
 					]
 				]
