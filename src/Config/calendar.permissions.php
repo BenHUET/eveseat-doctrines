@@ -2,6 +2,15 @@
 
 return [
     'doctrines' => [
-		'view'
+		'view',
+		'viewNotPublished',
+
+		'createFit',
+		'updateFitNotOwned',
+		'deleteFitNotOwned',
+
+		'createDoctrine',
+		'updateDoctrineNotOwned',
+		'deleteDoctrineNotOwned'
     ]
 ];

@@ -10,6 +10,7 @@ class DoctrinesServiceProvider extends ServiceProvider
 	{
 		$this->addRoutes();
 		$this->addViews();
+		$this->addMigrations();
 		$this->addTranslations();
 	}
 
@@ -27,6 +28,11 @@ class DoctrinesServiceProvider extends ServiceProvider
 	private function addViews()
 	{
 		$this->loadViewsFrom(__DIR__ . '/resources/views', 'doctrines');
+	}
+
+	private function addMigrations()
+	{
+		$this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 	}
 
 	private function addTranslations()
