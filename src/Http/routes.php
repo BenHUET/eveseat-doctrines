@@ -40,6 +40,12 @@ Route::group([
 			'middleware' => 'bouncer:doctrines.createFit',
 		]);
 
+		Route::post('createPreview', [
+			'as' => 'doctrines.fit.indexStorePreview',
+			'uses' => 'FitController@indexStorePreview',
+			'middleware' => 'bouncer:doctrines.createFit',
+		]);
+
 	});
 
 });

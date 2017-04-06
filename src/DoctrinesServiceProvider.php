@@ -12,6 +12,7 @@ class DoctrinesServiceProvider extends ServiceProvider
 		$this->addViews();
 		$this->addMigrations();
 		$this->addTranslations();
+		$this->addPublications();
 	}
 
 	public function register()
@@ -38,5 +39,13 @@ class DoctrinesServiceProvider extends ServiceProvider
 	private function addTranslations()
 	{
 		$this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'doctrines');
+	}
+
+	private function addPublications() 
+	{
+		$this->publishes([
+			__DIR__ . '/resources/assets/vendors/css' => public_path('web/css'),
+			__DIR__ . '/resources/assets/vendors/js' => public_path('web/js')
+		]);
 	}
 }
