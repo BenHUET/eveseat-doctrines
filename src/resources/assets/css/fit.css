@@ -1,0 +1,142 @@
+#pretty_display .bg-circle {
+	position: relative;
+	padding-bottom: 100%;
+	width: 100%;
+	max-width: 700px;
+	height: 0;
+	border-radius: 50%;
+	background: black;
+	display: block;
+	z-index: 1;
+}
+
+#pretty_display .ship {
+    position: relative;
+    left: 12%;
+    border-radius: 50%;
+    padding-top: 12%;
+    padding-bottom: 15%;
+    width: 74%;
+    max-width: 512px;
+    z-index: 2;
+}
+
+#pretty_display .item {
+	display: block;
+	border-radius: 50%;
+	position: absolute;
+	top: 50%; left: 50%;
+	width: 8%; height: 8%;
+	margin: -4%;
+
+	z-index: 3;
+}
+
+#pretty_display .high {
+	background-color: #243626;
+}
+#pretty_display .med {
+	background-color: #242B36;
+}
+#pretty_display .low {
+	background-color: #362F24;
+}
+#pretty_display .rig {
+	background-color: #362434;
+}
+
+#pretty_display .high1 {
+	transform: rotate(216deg) translate(540%) rotate(-216deg);
+}
+#pretty_display .high2 {
+	transform: rotate(228deg) translate(540%) rotate(-228deg);
+}
+#pretty_display .high3 {
+	transform: rotate(240deg) translate(540%) rotate(-240deg);
+}
+#pretty_display .high4 {
+	transform: rotate(252deg) translate(540%) rotate(-252deg);
+}
+#pretty_display .high5 {
+	transform: rotate(264deg) translate(540%) rotate(-264deg);
+}
+#pretty_display .high6 {
+	transform: rotate(276deg) translate(540%) rotate(-276deg);
+}
+#pretty_display .high7 {
+	transform: rotate(288deg) translate(540%) rotate(-288deg);
+}
+#pretty_display .high8 {
+	transform: rotate(300deg) translate(540%) rotate(-300deg);
+}
+
+#pretty_display .low1 {
+	transform: rotate(12deg) translate(540%) rotate(-12deg);
+}
+#pretty_display .low2 {
+	transform: rotate(24deg) translate(540%) rotate(-24deg);
+}
+#pretty_display .low3 {
+	transform: rotate(36deg) translate(540%) rotate(-36deg);
+}
+#pretty_display .low4 {
+	transform: rotate(48deg) translate(540%) rotate(-48deg);
+}
+#pretty_display .low5 {
+	transform: rotate(60deg) translate(540%) rotate(-60deg);
+}
+#pretty_display .low6 {
+	transform: rotate(360deg) translate(540%) rotate(-360deg);
+}
+#pretty_display .low7 {
+	transform: rotate(348deg) translate(540%) rotate(-348deg);
+}
+#pretty_display .low8 {
+	transform: rotate(336deg) translate(540%) rotate(-336deg);
+}
+
+#pretty_display .med1 {
+	transform: rotate(180deg) translate(540%) rotate(-180deg);
+}
+#pretty_display .med2 {
+	transform: rotate(168deg) translate(540%) rotate(-168deg);
+}
+#pretty_display .med3 {
+	transform: rotate(156deg) translate(540%) rotate(-156deg);
+}
+#pretty_display .med4 {
+	transform: rotate(144deg) translate(540%) rotate(-144deg);
+}
+#pretty_display .med5 {
+	transform: rotate(132deg) translate(540%) rotate(-132deg);
+}
+#pretty_display .med6 {
+	transform: rotate(120deg) translate(540%) rotate(-120deg);
+}
+#pretty_display .med7 {
+	transform: rotate(108deg) translate(540%) rotate(-108deg);
+}
+#pretty_display .med8 {
+	transform: rotate(96deg) translate(540%) rotate(-96deg);
+}
+
+#pretty_display .rig1 {
+	transform: rotate(110deg) translate(370%) rotate(-110deg);
+}
+#pretty_display .rig2 {
+	transform: rotate(130deg) translate(370%) rotate(-130deg);
+}
+#pretty_display .rig3 {
+	transform: rotate(150deg) translate(370%) rotate(-150deg);
+}
+
+#pretty_display .fitted {
+	width: 100%;
+	max-width: 64px;
+	position: relative;
+	z-index: 4;
+}
+
+#pretty_display .empty {
+	background-color: #1C1C1C;
+}

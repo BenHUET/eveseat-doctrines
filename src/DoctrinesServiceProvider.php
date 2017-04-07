@@ -44,8 +44,7 @@ class DoctrinesServiceProvider extends ServiceProvider
 	private function addPublications() 
 	{
 		$this->publishes([
-			__DIR__ . '/resources/assets/vendors/css' => public_path('web/css'),
-			__DIR__ . '/resources/assets/vendors/js' => public_path('web/js')
+			__DIR__ . '/resources/assets/css' => public_path('web/css/kassie/doctrines')
 		]);
 	}
 }
