@@ -34,7 +34,7 @@ class FitController extends Controller
 			session()->forget('fit');
 		}
 
-		// return response()->json($pretty_display);
+		return response()->json($pretty_display);
 
 		return view('doctrines::fit.create', [
 			'err' => $err,

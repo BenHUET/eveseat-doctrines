@@ -11,8 +11,10 @@ use Seat\Kassie\Doctrines\Models\SDE\DgmTypeAttribute;
 class ParserEFT
 {
 
+	private static $fit;
+
 	public static function Parse($raw) {
-		$fit = [
+		self::$fit = [
 			'items' => array()
 		];
 
@@ -22,16 +24,16 @@ class ParserEFT
 		foreach(preg_split("/((\r?\n)|(\r\n?))/", $raw) as $line) {
 			if ($first) {
 				$header = self::parseHeader($line);
-				$fit['ship'] = $header['ship'];
-				$fit['title'] = $header['title'];
+				self::$fit['ship'] = $header['ship'];
+				self::$fit['title'] = $header['title'];
 				$first = false;
 			}
 			else {
-				$fit['items'][] = self::parseItem($line);
+				self::$fit['items'][] = self::parseItem($line);
 			}
 		}
 
-		return $fit;
+		return self::$fit;
 	}
 
 	private static function parseHeader($line) {
@@ -55,13 +57,17 @@ class ParserEFT
 			$result['ship'] = [
 				'id' => $query->typeID,
 				'name' => $query->typeName,
-				'layout' => [
-					'low' => $query->dgm_type_attributes->where('attributeID', '12')->first()->value,
-					'med' => $query->dgm_type_attributes->where('attributeID', '13')->first()->value,
-					'high' => $query->dgm_type_attributes->where('attributeID', '14')->first()->value,
-					'rig' => $query->dgm_type_attributes->where('attributeID', '1137')->first()->value
-				]
 			];
+
+			$layout = array();
+			foreach([12, 13, 14, 1137] as $id) {
+				$attr = $query->dgm_type_attributes->where('attributeID', $id);
+				$count = $attr->first() ? $attr->first()->value : 0;
+				$layout[self::attributeIDToHuman($id)] = $count;
+			}
+
+			$result['ship']['layout'] = $layout;
+			$result['ship']['layout']['subsystem'] = 0;
 		}
 		else {
 			throw new DoctrinesFitParseException("Invalid ship.");
@@ -95,16 +101,22 @@ class ParserEFT
 		$item_query = InvType::where('typeName', '=', $item)->first();
 
 		if ($item_query) {
-			$cat = strtolower($item_query->inv_group->inv_category->categoryName);
+			$res['cat'] = strtolower($item_query->inv_group->inv_category->categoryName);
+			$res['group'] = strtolower($item_query->inv_group->groupName);
 
-			$res['type'] = $cat;
-			$res[$cat] = [
-				'id' => $item_query->typeID,
-				'name' => $item_query->typeName,
-			];
-
-			if ($cat == 'module') {
+			if ($res['cat'] == 'module') {
 				$res['slot'] = self::effectIDToHuman($item_query->dgm_type_effects->whereIn('effectID', [11, 12, 13, 2663])->first()->effectID);
+			}
+
+			if ($res['cat'] == 'subsystem') {
+				foreach([1374, 1375, 1376] as $id) {
+					$attr = $item_query->dgm_type_attributes->where('attributeID', $id);
+					$count = $attr->first() ? $attr->first()->value : 0;
+					self::$fit['ship']['layout'][self::attributeIDToHuman($id)] += $count;
+				}
+				self::$fit['ship']['layout']['subsystem'] = 5;
+				$res['slot'] = 'subsystem';
+				$res['cat'] = 'module';
 			}
 			
 			if ($charge) {
@@ -119,6 +131,11 @@ class ParserEFT
 					throw new DoctrinesFitParseException('Charge "' . $charge . '" not found.');
 				}
 			}
+
+			$res[$res['cat']] = [
+				'id' => $item_query->typeID,
+				'name' => $item_query->typeName,
+			];
 		}
 		else {
 			throw new DoctrinesFitParseException('Item "' . $item . '" not found.');
@@ -136,6 +153,24 @@ class ParserEFT
 			case 13:
 				return 'med';
 			case 2663:
+				return 'rig';
+		}
+
+		return null;
+	}
+
+	private static function attributeIDToHuman($attributeID) {
+		switch ($attributeID) {
+			case 12:
+			case 1376:
+				return 'low';
+			case 13:
+			case 1375:
+				return 'med';
+			case 14:
+			case 1374:
+				return 'high';
+			case 1137:
 				return 'rig';
 		}
 

@@ -2,6 +2,7 @@
 
 return [
 
+'copy' => 'Copy',
 'details' => 'Details',
 'import' => 'Import',
 'load' => 'Load',

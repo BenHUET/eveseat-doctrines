@@ -14,7 +14,7 @@
 			<div class="box-body">
 				{{ csrf_field() }}
 				<div class="form-group">
-					<textarea class="form-control" spellcheck="false" rows="30" name="eft">@if($fit_raw){{ $fit_raw }}@endif</textarea>
+					<textarea class="form-control" spellcheck="false" rows="25" name="eft">@if($fit_raw){{ $fit_raw }}@endif</textarea>
 				</div>
 			</div>
 			<div class="box-footer">
@@ -40,9 +40,9 @@
 					<h3>{{ $pretty_display['ship']['name'] }} | {{ $pretty_display['title'] }}</h3>
 					@include('doctrines::fit.includes.pretty_display', ['pretty' => $pretty_display])
 				@else
-					<div class="alert alert-info">
+					<i>
 						{{ trans('doctrines::notices.no_fit_loaded') }}
-					</div>
+					</i>
 				@endif
 			@endif
 		</div>
@@ -62,4 +62,8 @@
 
 @push('head')
 	<link rel="stylesheet" href="{{ asset('web/css/kassie/doctrines/fit.css') }}" />
+@endpush
+
+@push('javascript')
+	<script src="{{ asset('web/js/kassie/doctrines/fit.js') }}"></script>
 @endpush

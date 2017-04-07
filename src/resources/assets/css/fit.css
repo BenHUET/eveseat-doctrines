@@ -12,9 +12,9 @@
 
 #pretty_display .ship {
     position: relative;
-    left: 12%;
+    left: 13%;
     border-radius: 50%;
-    padding-top: 12%;
+    padding-top: 13%;
     padding-bottom: 15%;
     width: 74%;
     max-width: 512px;
@@ -33,16 +33,19 @@
 }
 
 #pretty_display .high {
-	background-color: #243626;
+	background-color: #2d6919;
 }
 #pretty_display .med {
-	background-color: #242B36;
+	background-color: #194469;
 }
 #pretty_display .low {
-	background-color: #362F24;
+	background-color: #694519;
 }
 #pretty_display .rig {
-	background-color: #362434;
+	background-color: #601969;
+}
+#pretty_display .subsystem {
+	background-color: #691919;
 }
 
 #pretty_display .high1 {
@@ -130,6 +133,22 @@
 	transform: rotate(150deg) translate(370%) rotate(-150deg);
 }
 
+#pretty_display .subsystem1 {
+	transform: rotate(230deg) translate(370%) rotate(-230deg);
+}
+#pretty_display .subsystem2 {
+	transform: rotate(250deg) translate(370%) rotate(-250deg);
+}
+#pretty_display .subsystem3 {
+	transform: rotate(270deg) translate(370%) rotate(-270deg);
+}
+#pretty_display .subsystem4 {
+	transform: rotate(290deg) translate(370%) rotate(-290deg);
+}
+#pretty_display .subsystem5 {
+	transform: rotate(310deg) translate(370%) rotate(-310deg);
+}
+
 #pretty_display .fitted {
 	width: 100%;
 	max-width: 64px;
@@ -138,5 +157,10 @@
 }
 
 #pretty_display .empty {
-	background-color: #1C1C1C;
+    background-color: #333;
+    border: 2px solid #aaa;
+}
+
+#fit-raw {
+	resize: none;
 }
