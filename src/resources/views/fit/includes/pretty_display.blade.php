@@ -30,13 +30,25 @@
 
 		<div role="tabpanel" class="tab-pane" id="drones">
 			<div class="well">
-				{!! nl2br(e($fit->drones)) !!}
+				@foreach ($fit->drones as $drone)
+					{{ $drone->typeName }}
+					@if ($drone->pivot->qty > 1)
+						x{{ $drone->pivot->qty }}
+					@endif
+					<br>
+				@endforeach
 			</div>
 		</div>
 
 		<div role="tabpanel" class="tab-pane" id="cargo">
 			<div class="well">
-				{!! nl2br(e($fit->cargo)) !!}
+				@foreach ($fit->cargo as $item)
+					{{ $item->typeName }}
+					@if ($item->pivot->qty > 1)
+						x{{ $item->pivot->qty }}
+					@endif
+					<br>
+				@endforeach
 			</div>
 		</div>
 

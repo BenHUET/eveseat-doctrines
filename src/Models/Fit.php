@@ -121,28 +121,13 @@ class Fit extends Model
 	}
 
 	public function getDronesAttribute() {
-		$lines = array();
-		
-		$drones = $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
-		foreach($drones as $drone) {
-			$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
-		}
-
-		return join(" \r\n ", $lines);
+		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
 	}
 
 	public function getCargoAttribute() {
-		$lines = array();
-		
-		$items = $this->inv_types->all();
-		foreach($items as $item) {
-			if ($item->pivot->state == 'on-board')
-				$lines[] = $item->typeName . ' x' . $item->pivot->qty;
-		}
-
-		return join(" \r\n ", $lines);
+		return $this->inv_types->where('pivot.state', 'on-board');
 	}
 
-	
+
 
 }
