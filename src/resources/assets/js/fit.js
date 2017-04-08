@@ -1,10 +1,22 @@
 /* Copy EFT to clipboard */
-var toCopy  = document.getElementById('fit-raw');
-var btnCopy = document.getElementById('copy');
+var eft  = document.getElementById('fit-eft');
+var btnCopyEFT = document.getElementById('copy_eft');
 
-if (btnCopy != null) {
-	btnCopy.addEventListener('click', function(){
-		toCopy.select();
+if (btnCopyEFT != null) {
+	btnCopyEFT.addEventListener('click', function(){
+		eft.select();
+		document.execCommand('copy');
+		return false;
+	});
+}
+
+/* Copy Multibuy to clipboard */
+var multibuy  = document.getElementById('fit-multibuy');
+var btnCopyMultibuy = document.getElementById('copy_multibuy');
+
+if (btnCopyMultibuy != null) {
+	btnCopyMultibuy.addEventListener('click', function(){
+		multibuy.select();
 		document.execCommand('copy');
 		return false;
 	});

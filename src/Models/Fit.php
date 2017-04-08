@@ -104,7 +104,7 @@ class Fit extends Model
 			$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
 		}
 
-		return join(" \r\n ", $lines);
+		return join(" \r\n", $lines);
 	}
 
 	public function getMultibuyAttribute() {
@@ -117,7 +117,7 @@ class Fit extends Model
 			$lines[] = $item->pivot->qty . 'x ' . $item->typeName;
 		}
 
-		return join(" \r\n ", $lines);
+		return join(" \r\n", $lines);
 	}
 
 	public function getDronesAttribute() {

@@ -54,7 +54,14 @@
 
 		<div role="tabpanel" class="tab-pane" id="multibuy">
 			<div class="well">
-				{!! nl2br(e($fit->multibuy)) !!}
+				<div class="row">
+					<div class="col-md-10">
+						<textarea id="fit-multibuy" class="form-control" readonly rows="15">{{ $fit->multibuy }}</textarea>
+					</div>
+					<div class="col-md-2">
+						<button type="submit" id="copy_multibuy" class="btn btn-info btn-block btn-sm pull-right">{{ trans('doctrines::words.copy') }}</button>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -62,10 +69,10 @@
 			<div class="well">
 				<div class="row">
 					<div class="col-md-10">
-						<textarea id="fit-raw" class="form-control" readonly rows="15">{{ $fit->eft }}</textarea>
+						<textarea id="fit-eft" class="form-control" readonly rows="15">{{ $fit->eft }}</textarea>
 					</div>
 					<div class="col-md-2">
-						<button type="submit" id="copy" class="btn btn-info btn-block btn-sm pull-right">{{ trans('doctrines::words.copy') }}</button>
+						<button type="submit" id="copy_eft" class="btn btn-info btn-block btn-sm pull-right">{{ trans('doctrines::words.copy') }}</button>
 					</div>
 				</div>
 			</div>
