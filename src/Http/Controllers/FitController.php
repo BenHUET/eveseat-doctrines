@@ -22,6 +22,7 @@ class FitController extends Controller
 	public function indexStore()
 	{
 		$fit = null;
+		$raw_eft = null;
 		$err = null;
 
 		if (session()->has('fit')) {
@@ -35,13 +36,17 @@ class FitController extends Controller
 			catch (DoctrinesItemNotAModuleException $e) {
 				$err = $e->getMessage();
 			}
+
+			$raw_eft = session('fit');
+
 			session()->forget('fit');
 			session()->forget('cargo');
 		}
 
 		return view('doctrines::fit.create', [
 			'err' => $err,
-			'fit' => $fit
+			'fit' => $fit,
+			'raw_eft' => $raw_eft
 		]);
 	}
 

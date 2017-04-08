@@ -15,7 +15,7 @@
 				<form id="form_fit_create_load"  method="POST" action="{{ route('doctrines.fit.indexStorePreview') }}">
 					{{ csrf_field() }}
 					<div class="form-group">
-						<textarea class="form-control" spellcheck="false" rows="25" name="eft"></textarea>
+						<textarea class="form-control" spellcheck="false" rows="25" name="eft">@if ($raw_eft){{ $raw_eft }}@endif</textarea>
 					</div>
 					<button type="submit" id="form_fit_create_load_btn_submit" class="btn btn-default btn-block">{{ trans('doctrines::words.load') }}</button>
 				</form>

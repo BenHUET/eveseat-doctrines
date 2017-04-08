@@ -72,28 +72,28 @@
 	transform: rotate(300deg) translate(540%) rotate(-300deg);
 }
 
-#pretty_display .low1 {
+#pretty_display .low8 {
 	transform: rotate(336deg) translate(540%) rotate(-336deg);
 }
-#pretty_display .low2 {
+#pretty_display .low7 {
 	transform: rotate(348deg) translate(540%) rotate(-348deg);
 }
-#pretty_display .low3 {
+#pretty_display .low6 {
 	transform: rotate(360deg) translate(540%) rotate(-360deg);
 }
-#pretty_display .low4 {
+#pretty_display .low5 {
 	transform: rotate(12deg) translate(540%) rotate(-12deg);
 }
-#pretty_display .low5 {
+#pretty_display .low4 {
 	transform: rotate(24deg) translate(540%) rotate(-24deg);
 }
-#pretty_display .low6 {
+#pretty_display .low3 {
 	transform: rotate(36deg) translate(540%) rotate(-36deg);
 }
-#pretty_display .low7 {
+#pretty_display .low2 {
 	transform: rotate(48deg) translate(540%) rotate(-48deg);
 }
-#pretty_display .low8 {
+#pretty_display .low1 {
 	transform: rotate(60deg) translate(540%) rotate(-60deg);
 }
 

@@ -62,4 +62,73 @@ class Fit extends Model
 		return collect($layout);
 	}
 
+	public function getEftAttribute() {
+		$lines = array();
+
+		$header = '[' . $this->ship->typeName;
+		if ($this->name)
+			$header .= ', '  . $this->name;
+		$header .= ']';
+
+		$lines[] = $header;
+
+		$items = $this->inv_types->where('pivot.state', 'fitted');
+		$modules = $items->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
+		$charges = $items->where('inv_group.inv_category.categoryName', 'Charge');
+		$drones = $items->where('inv_group.inv_category.categoryName', 'Drone');
+
+		$racks = ['high', 'low', 'med', 'rig', 'subsystem'];
+		foreach ($racks as $rack) {
+			$lines[] = '';
+			for ($i = 0; $i < $this->layout->get($rack); $i++) {
+				foreach ($modules as $module) {
+					if ($module->slot == $rack) {
+						for ($qty = 0; $qty < $module->pivot->qty; $qty++) {
+							$lines[] = $module->typeName;
+						}
+						$modules = $modules->except([$module->typeID]);
+						break;
+					}
+				}
+			}
+		}
+
+		foreach ($drones as $drone) {
+			$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
+		}
+
+		if ($drones)
+			$lines[] = '';
+
+		foreach ($charges as $charge) {
+			$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
+		}
+
+		return join(" \r\n ", $lines);
+	}
+
+	public function getMultibuyAttribute() {
+		$lines = array();
+
+		$lines[] = '1x ' . $this->ship->typeName;
+		
+		$items = $this->inv_types->all();
+		foreach($items as $item) {
+			$lines[] = $item->pivot->qty . 'x ' . $item->typeName;
+		}
+
+		return join(" \r\n ", $lines);
+	}
+
+	public function getDronesAttribute() {
+		$lines = array();
+		
+		$drones = $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
+		foreach($drones as $drone) {
+			$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
+		}
+
+		return join(" \r\n ", $lines);
+	}
+
 }
