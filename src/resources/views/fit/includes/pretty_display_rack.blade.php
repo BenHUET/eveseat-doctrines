@@ -1,15 +1,19 @@
-<?php $i = 0 ?>
-@foreach($pretty_display['items'] as $item)
-	@if($item['cat'] == 'module' && $item['slot'] == $rack && $i < $pretty_display['ship']['layout'][$rack])
-		@for ($qty = 0; $qty < $item['qty']; $qty++)
-			<div class="item {{ $rack }} {{ $rack . ($i + 1) }}" data-toggle="tooltip" data-placement="top" title="{{ $item['module']['name'] }}">
-				<img class="fitted" src="http://image.eveonline.com/Type/{{ $item['module']['id'] }}_64.png" >
-			</div>
-			<?php $i++ ?>
-		@endfor
+<?php $fitted_count = 0 ?>
+@foreach ($fit->inv_types as $item)
+	@if ($item->pivot->state == 'fitted')
+		@if($item->slot == $rack)
+			@for ($qty = 0; $qty < $item->pivot->qty; $qty++)
+				@if ($fitted_count < $fit->layout->get($rack))
+					<div class="item {{ $rack }} {{ $rack . ($fitted_count + 1) }}" data-toggle="tooltip" data-placement="top" title="{{ $item->typeName }}">
+						<img class="fitted" src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" >
+					</div>
+					<?php $fitted_count++ ?>
+				@endif
+			@endfor
+		@endif
 	@endif
 @endforeach
 
-@for ($j = $i; $j < $pretty_display['ship']['layout'][$rack]; $j++)
-	<div class="item {{ $rack }} {{ $rack . ($j + 1) }} empty"></div>
+@for ($empty_slot = $fitted_count; $empty_slot < $fit->layout->get($rack); $empty_slot++)
+	<div class="item {{ $rack }} {{ $rack . ($empty_slot + 1) }} empty"></div>
 @endfor

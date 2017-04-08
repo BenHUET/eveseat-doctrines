@@ -9,7 +9,7 @@ class CreateDoctrinesTables extends Migration
 {
 	public function up()
 	{
-		Schema::create('doctrines_doctrine_folders', function (Blueprint $table) {
+		Schema::create('doctrines_folders', function (Blueprint $table) {
 			$table->increments('id');
 
 			$table->string('name');
@@ -30,7 +30,7 @@ class CreateDoctrinesTables extends Migration
 			$table->integer('folder_id')->unsigned()->nullable();
 			$table->foreign('folder_id')
 				->references('id')
-				->on('doctrines_doctrine_folders')
+				->on('doctrines_folders')
 				->onDelete('set null');
 
 			$table->integer('owner_id')->unsigned()->nullable();
@@ -40,7 +40,7 @@ class CreateDoctrinesTables extends Migration
 				->onDelete('set null');
 		});
 
-		Schema::create('doctrines_fit_categories', function (Blueprint $table) {
+		Schema::create('doctrines_fit_category', function (Blueprint $table) {
 			$table->increments('id');
 
 			$table->string('name');
@@ -51,22 +51,22 @@ class CreateDoctrinesTables extends Migration
 			$table->increments('id');
 
 			$table->string('name');
-			$table->longText('raw');
 			$table->longText('comment')->nullable();
-			$table->boolean('published');
+			$table->boolean('published')->default(false);
+			$table->boolean('sane')->default(false);
 
 			$table->softDeletes();
 			$table->timestamps();
 
-			$table->integer('ship');
-			$table->foreign('ship')
+			$table->integer('ship_id');
+			$table->foreign('ship_id')
 				  ->references('typeID')
 				  ->on('invTypes');
 
 			$table->integer('category_id')->unsigned()->nullable();
 			$table->foreign('category_id')
 				->references('id')
-				->on('doctrines_fit_categories')
+				->on('doctrines_fit_category')
 				->onDelete('set null');
 
 			$table->integer('owner_id')->unsigned()->nullable();
@@ -74,6 +74,23 @@ class CreateDoctrinesTables extends Migration
 				->references('id')
 				->on('users')
 				->onDelete('set null');
+		});
+
+		Schema::create('doctrines_fit_inv_type', function (Blueprint $table) {
+			$table->integer('fit_id')->unsigned()->nullable();
+			$table->integer('inv_type_id');
+
+			$table->string('state');
+			$table->smallInteger('qty');
+
+			$table->foreign('fit_id')
+				  ->references('id')
+				  ->on('doctrines_fits')
+				  ->onDelete('set null');
+			
+			$table->foreign('inv_type_id')
+				  ->references('typeID')
+				  ->on('invTypes');
 		});
 
 		Schema::create('doctrines_doctrine_fit', function (Blueprint $table) {
@@ -93,10 +110,11 @@ class CreateDoctrinesTables extends Migration
 
 	public function down()
 	{
+		Schema::drop('doctrines_fit_inv_type');
 		Schema::drop('doctrines_doctrine_fit');
 		Schema::drop('doctrines_doctrines');
 		Schema::drop('doctrines_fits');
-		Schema::drop('doctrines_doctrine_folders');
-		Schema::drop('doctrines_fit_categories');
+		Schema::drop('doctrines_fit_category');
+		Schema::drop('doctrines_folders');
 	}
 }

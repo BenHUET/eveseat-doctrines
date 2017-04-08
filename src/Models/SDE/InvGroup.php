@@ -12,6 +12,7 @@ class InvGroup extends Model
 {
 
 	protected $table = 'invGroups';
+	protected $primaryKey = 'groupID';
 
 	public function inv_types()
 	{

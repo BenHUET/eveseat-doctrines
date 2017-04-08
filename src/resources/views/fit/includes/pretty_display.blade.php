@@ -12,14 +12,14 @@
 			<div class="well">
 				<div class="bg-circle">
 
-					<img class="ship" src="http://image.eveonline.com/Render/{{ $pretty_display['ship']['id'] }}_512.png" alt="{{ $pretty_display['ship']['name'] }}">
+					<img class="ship" src="http://image.eveonline.com/Render/{{ $fit->ship->typeID }}_512.png">
 
 					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'high'])
 					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'med'])
 					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'low'])
 					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'rig'])
-					@if ($pretty_display['ship']['layout']['subsystem'] > 0)
-					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'subsystem'])
+					@if ($fit->layout->get('subsystem') > 0)
+						@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'subsystem'])
 					@endif
 
 				</div>
@@ -36,20 +36,7 @@
 			</div>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="eft">
-			<div class="well">
-				<div class="row">
-					<div class="col-md-10">
-						@if ($fit_raw)
-							<?php $eft_output = $fit_raw; ?>
-						@endif
-						<textarea id="fit-raw" class="form-control" readonly rows="15">{{ $eft_output }}</textarea>
-					</div>
-					<div class="col-md-2">
-						<button type="submit" id="copy" class="btn btn-info btn-sm pull-right">{{ trans('doctrines::words.copy') }}</button>
-					</div>
-				</div>
-			</div>
-			
+
 		</div>
 	</div>
 

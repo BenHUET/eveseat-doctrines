@@ -9,6 +9,8 @@ use Seat\Web\Http\Controllers\Controller;
 use Seat\Kassie\Doctrines\Models\Fit;
 use Seat\Kassie\Doctrines\Exceptions\DoctrinesFitParseException;
 
+use Seat\Kassie\Doctrines\Helpers\ParserEFT;
+
 class FitController extends Controller
 {
 
@@ -19,35 +21,36 @@ class FitController extends Controller
 
 	public function indexStore()
 	{
-		$pretty_display = null;
-		$fit_raw = null;
+		$fit = null;
 		$err = null;
 
 		if (session()->has('fit')) {
-			$fit_raw = session('fit')->raw;
 			try {
-				$pretty_display = session('fit')->pretty_display;
+				$fit = ParserEFT::Parse(session('fit'), 'fitted');
+				// $cargo = ParserEFT::Parse(session('cargo'), 'onboard');
 			}
 			catch (DoctrinesFitParseException $e) {
 				$err = $e->getMessage();
 			}
+			catch (DoctrinesItemNotAModuleException $e) {
+				$err = $e->getMessage();
+			}
 			session()->forget('fit');
+			session()->forget('cargo');
 		}
-
-		return response()->json($pretty_display);
 
 		return view('doctrines::fit.create', [
 			'err' => $err,
-			'pretty_display' => $pretty_display,
-			'fit_raw' => $fit_raw
+			'fit' => $fit
 		]);
 	}
 
 	public function indexStorePreview(Request $request)
 	{
-		$fit = new Fit();
-		$fit->raw = $request->eft;
-		session(['fit' => $fit]);
+		session([
+			'fit' => $request->eft,
+			'cargo' => $request->cargo
+		]);
 		return redirect()->route('doctrines.fit.indexStore');
 	}
 

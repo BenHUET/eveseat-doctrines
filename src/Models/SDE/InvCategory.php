@@ -10,6 +10,7 @@ class InvCategory extends Model
 {
 	
 	protected $table = 'invCategories';
+	protected $primaryKey = 'categoryID';
 
 	public function inv_groups()
 	{

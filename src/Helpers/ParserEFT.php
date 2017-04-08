@@ -3,35 +3,38 @@
 namespace Seat\Kassie\Doctrines\Helpers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Seat\Kassie\Doctrines\Exceptions\DoctrinesFitParseException;
 
 use Seat\Kassie\Doctrines\Models\SDE\InvType;
-use Seat\Kassie\Doctrines\Models\SDE\DgmTypeAttribute;
+use Seat\Kassie\Doctrines\Models\Fit;
 
 class ParserEFT
 {
-
 	private static $fit;
+	private static $location;
 
-	public static function Parse($raw) {
-		self::$fit = [
-			'items' => array()
-		];
+	public static function Parse($raw, $location) {
+		$raw = trim(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $raw));
+
+		self::$fit = new Fit;
+		self::$location = $location;
 
 		$first = true;
-
 		/* http://stackoverflow.com/a/1462759 */
 		foreach(preg_split("/((\r?\n)|(\r\n?))/", $raw) as $line) {
 			if ($first) {
-				$header = self::parseHeader($line);
-				self::$fit['ship'] = $header['ship'];
-				self::$fit['title'] = $header['title'];
+				self::parseHeader($line);
+				self::$fit->save();
 				$first = false;
 			}
 			else {
-				self::$fit['items'][] = self::parseItem($line);
+				self::parseItem($line);
 			}
 		}
+
+		self::$fit->sane = true;
+		self::$fit->save();
 
 		return self::$fit;
 	}
@@ -54,32 +57,17 @@ class ParserEFT
 		->first();
 
 		if ($query && strlen($ship) > 0) {
-			$result['ship'] = [
-				'id' => $query->typeID,
-				'name' => $query->typeName,
-			];
-
-			$layout = array();
-			foreach([12, 13, 14, 1137] as $id) {
-				$attr = $query->dgm_type_attributes->where('attributeID', $id);
-				$count = $attr->first() ? $attr->first()->value : 0;
-				$layout[self::attributeIDToHuman($id)] = $count;
-			}
-
-			$result['ship']['layout'] = $layout;
-			$result['ship']['layout']['subsystem'] = 0;
+			self::$fit->ship()->associate($query);
 		}
 		else {
 			throw new DoctrinesFitParseException("Invalid ship.");
 		}
 		
-		$result['title'] = $title;
-
-		return $result;
+		self::$fit->name = $title ?: auth()->user()->name . "'s " . $query->typeName;
 	}
 
 	private static function parseItem($line) {
-		$res = ['qty' => 1];
+		$qty = 1;
 		$item = $line;
 		$charge = null;
 
@@ -93,88 +81,38 @@ class ParserEFT
 			$parts = explode('x', $item);
 			$last = $parts[count($parts) - 1];
 			if (is_numeric($last)) {
-				$res['qty'] = (int)$last;
+				$qty = (int)$last;
 				$item = str_replace("x" . $last, "", $item);
 			}
 		}
 
-		$item_query = InvType::where('typeName', '=', $item)->first();
+		$queries = array();
 
-		if ($item_query) {
-			$res['cat'] = strtolower($item_query->inv_group->inv_category->categoryName);
-			$res['group'] = strtolower($item_query->inv_group->groupName);
+		$queries[0] = InvType::where('typeName', '=', $item)->first();
+		if ($charge)
+			$queries[1] = InvType::where('typeName', '=', $charge)->first();
 
-			if ($res['cat'] == 'module') {
-				$res['slot'] = self::effectIDToHuman($item_query->dgm_type_effects->whereIn('effectID', [11, 12, 13, 2663])->first()->effectID);
-			}
-
-			if ($res['cat'] == 'subsystem') {
-				foreach([1374, 1375, 1376] as $id) {
-					$attr = $item_query->dgm_type_attributes->where('attributeID', $id);
-					$count = $attr->first() ? $attr->first()->value : 0;
-					self::$fit['ship']['layout'][self::attributeIDToHuman($id)] += $count;
-				}
-				self::$fit['ship']['layout']['subsystem'] = 5;
-				$res['slot'] = 'subsystem';
-				$res['cat'] = 'module';
-			}
-			
-			if ($charge) {
-				$charge_query = InvType::where('typeName', '=', $charge)->first();
-				if ($charge_query && $charge_query->inv_group->inv_category->categoryName == 'Charge')  {
-					$res['charge'] = [
-						'id' => $charge_query->typeID,
-						'name' => $charge_query->typeName
-					];
-				}
-				else {
-					throw new DoctrinesFitParseException('Charge "' . $charge . '" not found.');
-				}
-			}
-
-			$res[$res['cat']] = [
-				'id' => $item_query->typeID,
-				'name' => $item_query->typeName,
-			];
-		}
-		else {
+		if (!$queries[0] || ($charge && !$queries[1])) {
 			throw new DoctrinesFitParseException('Item "' . $item . '" not found.');
 		}
 
-		return $res;
-	}
+		for ($i = 0; $i < count($queries); $i++) {
+			$query = $queries[$i];
 
-	private static function effectIDToHuman($effectID) {
-		switch ($effectID) {
-			case 11:
-				return 'low';
-			case 12:
-				return 'high';
-			case 13:
-				return 'med';
-			case 2663:
-				return 'rig';
+			if ($i == 1) { // If charge
+				$module_capacity = $queries[0]->capacity;
+				$charge_volume = $query->volume;
+				$qty = $module_capacity / $charge_volume;
+			}
+
+			if (self::$fit->inv_types()->find($query->typeID)) {
+				$current_qty = self::$fit->inv_types()->find($query->typeID)->pivot->qty;
+				self::$fit->inv_types()->updateExistingPivot($query->typeID, ['qty' => ($qty + $current_qty)]);
+			}
+			else {
+				self::$fit->inv_types()->attach($query->typeID, ['state' => self::$location, 'qty' => $qty]);
+			}
 		}
-
-		return null;
-	}
-
-	private static function attributeIDToHuman($attributeID) {
-		switch ($attributeID) {
-			case 12:
-			case 1376:
-				return 'low';
-			case 13:
-			case 1375:
-				return 'med';
-			case 14:
-			case 1374:
-				return 'high';
-			case 1137:
-				return 'rig';
-		}
-
-		return null;
 	}
 
 }
