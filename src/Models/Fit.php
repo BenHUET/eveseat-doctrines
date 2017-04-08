@@ -27,6 +27,16 @@ class Fit extends Model
 		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')->withPivot('state', 'qty');
 	}
 
+	public function fitted() 
+	{
+		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')->wherePivot('state', 'fitted')->withPivot('qty');
+	}
+
+	public function on_board() 
+	{
+		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')->wherePivot('state', 'on-board')->withPivot('qty');
+	}
+
 	public function getLayoutAttribute() 
 	{
 		$layout = [
@@ -72,7 +82,7 @@ class Fit extends Model
 
 		$lines[] = $header;
 
-		$items = $this->inv_types->where('pivot.state', 'fitted');
+		$items = $this->fitted;
 		$modules = $items->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
 		$charges = $items->where('inv_group.inv_category.categoryName', 'Charge');
 		$drones = $items->where('inv_group.inv_category.categoryName', 'Drone');
@@ -123,11 +133,5 @@ class Fit extends Model
 	public function getDronesAttribute() {
 		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
 	}
-
-	public function getCargoAttribute() {
-		return $this->inv_types->where('pivot.state', 'on-board');
-	}
-
-
 
 }

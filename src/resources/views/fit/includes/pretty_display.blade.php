@@ -42,7 +42,7 @@
 
 		<div role="tabpanel" class="tab-pane" id="cargo">
 			<div class="well">
-				@foreach ($fit->cargo as $item)
+				@foreach ($fit->on_board as $item)
 					{{ $item->typeName }}
 					@if ($item->pivot->qty > 1)
 						x{{ $item->pivot->qty }}
