@@ -6,24 +6,45 @@
 @section('full')
 
 <div class="row">
-	<div class="col-md-7">
+	<div class="col-md-6">
 		<div class="box box-info">
 			<div class="box-header with-border">
 				<h3 class="box-title">{{ trans('doctrines::words.import') }} (EFT)</h3>
 			</div>
-			<div class="box-body">
-				<form id="form_fit_create_load"  method="POST" action="{{ route('doctrines.fit.indexStorePreview') }}">
-					{{ csrf_field() }}
-					<div class="form-group">
-						<textarea class="form-control" spellcheck="false" rows="25" name="eft">@if ($raw_eft){{ $raw_eft }}@endif</textarea>
+			<form id="form_fit_create_load"  method="POST" action="{{ route('doctrines.fit.indexStorePreview') }}">
+				{{ csrf_field() }}
+				<div class="box-body">
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#fitting_input" aria-controls="fitting_input" role="tab" data-toggle="tab">Fitting</a></li>
+						<li role="presentation"><a href="#cargo_input" aria-controls="cargo_input" role="tab" data-toggle="tab">Cargo</a></li>
+					</ul>
+
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="fitting_input">
+							<div class="well">
+								<div class="form-group">
+									<textarea class="form-control" spellcheck="false" rows="20" name="eft">@if ($raw_eft){{ $raw_eft }}@endif</textarea>
+								</div>
+							</div>
+						</div>
+
+						<div role="tabpanel" class="tab-pane" id="cargo_input">
+							<div class="well">
+								<div class="form-group">
+									<textarea class="form-control" spellcheck="false" rows="20" name="cargo">@if ($raw_cargo){{ $raw_cargo }}@endif</textarea>
+								</div>
+							</div>
+						</div>
 					</div>
+				</div>
+				<div class="box-footer">
 					<button type="submit" id="form_fit_create_load_btn_submit" class="btn btn-default btn-block">{{ trans('doctrines::words.load') }}</button>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 
-	<div class="col-md-5">
+	<div class="col-md-6">
 		<div id="box-preview" class="box box-info">
 			<div class="box-header with-border">
 				<h3 class="box-title">{{ trans('doctrines::words.preview') }}</h3>

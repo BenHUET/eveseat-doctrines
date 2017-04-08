@@ -36,7 +36,7 @@
 
 		<div role="tabpanel" class="tab-pane" id="cargo">
 			<div class="well">
-				
+				{!! nl2br(e($fit->cargo)) !!}
 			</div>
 		</div>
 

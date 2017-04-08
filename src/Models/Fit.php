@@ -131,4 +131,18 @@ class Fit extends Model
 		return join(" \r\n ", $lines);
 	}
 
+	public function getCargoAttribute() {
+		$lines = array();
+		
+		$items = $this->inv_types->all();
+		foreach($items as $item) {
+			if ($item->pivot->state == 'on-board')
+				$lines[] = $item->typeName . ' x' . $item->pivot->qty;
+		}
+
+		return join(" \r\n ", $lines);
+	}
+
+	
+
 }
