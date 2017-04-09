@@ -2,7 +2,6 @@
 
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#fitting" aria-controls="fitting" role="tab" data-toggle="tab">Fitting</a></li>
-		<li role="presentation"><a href="#drones" aria-controls="drones" role="tab" data-toggle="tab">Drones</a></li>
 		<li role="presentation"><a href="#cargo" aria-controls="cargo" role="tab" data-toggle="tab">Cargo</a></li>
 		<li role="presentation"><a href="#multibuy" aria-controls="multibuy" role="tab" data-toggle="tab">Multibuy</a></li>
 		<li role="presentation"><a href="#eft" aria-controls="eft" role="tab" data-toggle="tab">EFT</a></li>
@@ -24,22 +23,24 @@
 						@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'subsystem'])
 					@endif
 
-				</div>
-			</div>
-		</div>
-
-		<div role="tabpanel" class="tab-pane" id="drones">
-			<div class="well">
-				@foreach($fit->drones->chunk(3) as $drones)
-					<div class="row">
-						@foreach($drones as $drone)
-							<div class="drones col-md-4">
-								<img class="drone-img" src="http://image.eveonline.com/Type/{{ $drone->typeID }}_64.png" >
-								<span class="drone-text">{{ $drone->typeName }} x{{ $drone->pivot->qty }}</span>
+					<div class="drones">
+						<?php $drones = $fit->drones; ?>
+						@for ($row = 0; $row < 4; $row++)
+							<div class="row">
+								{{-- can't chunk! https://github.com/laravel/framework/issues/6281 --}}
+								@for ($i = 0; $i < 4 - $row; $i++)
+									<?php $drone = $drones->pop(); ?>
+									@if ($drone)
+										<div class="drone col-md-3 pull-right" data-toggle="tooltip" data-placement="top" title="{{ $drone->pivot->qty }}x {{ $drone->typeName }}">
+											<img class="drone-img" src="http://image.eveonline.com/Type/{{ $drone->typeID }}_64.png">
+										</div>
+									@endif
+								@endfor
 							</div>
-						@endforeach
+						@endfor
 					</div>
-				@endforeach
+
+				</div>
 			</div>
 		</div>
 

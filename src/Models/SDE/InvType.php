@@ -41,11 +41,12 @@ class InvType extends Model
 
 	public function getSlotAttribute()
 	{
-		if ($this->inv_group->inv_category->categoryName == 'Module') {
+		$category = $this->inv_group->inv_category->categoryName;
+		if ($category == 'Module') {
 			$effectID = $this->dgm_type_effects->whereIn('effectID', [11, 12, 13, 2663])->first()->effectID;
 			return SDEHelper::effectIDToHuman($effectID);
 		}
-		else if ($this->inv_group->inv_category->categoryName == 'Subsystem') {
+		else if ($category == 'Subsystem') {
 			return 'subsystem';
 		}
 

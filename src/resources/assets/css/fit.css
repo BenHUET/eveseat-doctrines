@@ -2,7 +2,6 @@
 	position: relative;
 	padding-bottom: 100%;
 	width: 100%;
-	max-width: 700px;
 	height: 0;
 	border-radius: 50%;
 	background: black;
@@ -15,9 +14,8 @@
     left: 13%;
     border-radius: 50%;
     padding-top: 13%;
-    padding-bottom: 15%;
+    padding-bottom: 13%;
     width: 74%;
-    max-width: 512px;
     z-index: 2;
 }
 
@@ -160,16 +158,22 @@
     border: 2px solid #aaa;
 }
 #pretty_display .drones {
-	padding: 10px;
+	position: absolute;
+	width: 20%;
+	right: 0px;
+	top: 0px;
+}
+#pretty_display .drone {
+	padding: 2px;
+	margin: 0;
 }
 #pretty_display .drone-img {
-	border: 2px solid brown;
-	display: block;
-	margin: auto;
+	width: 100%;
+	border: 1px solid lightcoral;
 }
-#pretty_display .drone-text {
-	margin-top: 10px;
-	display: block;
-	text-align: center;
-	font-weight: bold;
+
+/* http://stackoverflow.com/a/24006318 */
+.tooltip-inner  {
+	white-space: pre;
+	max-width: none;
 }

@@ -134,7 +134,7 @@ class Fit extends Model
 	}
 
 	public function rearrange() {
-		
+
 	}
 
 }
