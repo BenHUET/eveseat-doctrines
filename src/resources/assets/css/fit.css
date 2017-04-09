@@ -159,9 +159,11 @@
     background-color: #333;
     border: 2px solid #aaa;
 }
-
+#pretty_display .drones {
+	padding: 10px;
+}
 #pretty_display .drone-img {
-	border-radius: 50%;
+	border: 2px solid brown;
 	display: block;
 	margin: auto;
 }
