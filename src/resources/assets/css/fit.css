@@ -160,6 +160,14 @@
     border: 2px solid #aaa;
 }
 
-#fit-raw {
-	resize: none;
+#pretty_display .drone-img {
+	border-radius: 50%;
+	display: block;
+	margin: auto;
+}
+#pretty_display .drone-text {
+	margin-top: 10px;
+	display: block;
+	text-align: center;
+	font-weight: bold;
 }

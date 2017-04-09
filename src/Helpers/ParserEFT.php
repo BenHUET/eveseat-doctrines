@@ -38,6 +38,8 @@ class ParserEFT
 			}
 		}
 
+		self::$fit->rearrange();
+
 		self::$fit->sane = true;
 		self::$fit->save();
 

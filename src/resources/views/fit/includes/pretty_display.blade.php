@@ -30,12 +30,15 @@
 
 		<div role="tabpanel" class="tab-pane" id="drones">
 			<div class="well">
-				@foreach ($fit->drones as $drone)
-					{{ $drone->typeName }}
-					@if ($drone->pivot->qty > 1)
-						x{{ $drone->pivot->qty }}
-					@endif
-					<br>
+				@foreach($fit->drones->chunk(3) as $drones)
+					<div class="row">
+						@foreach($drones as $drone)
+							<div class="drones col-md-4">
+								<img class="drone-img" src="http://image.eveonline.com/Type/{{ $drone->typeID }}_64.png" >
+								<span class="drone-text">{{ $drone->typeName }} x{{ $drone->pivot->qty }}</span>
+							</div>
+						@endforeach
+					</div>
 				@endforeach
 			</div>
 		</div>

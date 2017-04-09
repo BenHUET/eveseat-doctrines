@@ -82,10 +82,9 @@ class Fit extends Model
 
 		$lines[] = $header;
 
-		$items = $this->fitted;
-		$modules = $items->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
-		$charges = $items->where('inv_group.inv_category.categoryName', 'Charge');
-		$drones = $items->where('inv_group.inv_category.categoryName', 'Drone');
+		$modules = $this->fitted->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
+		$charges = $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge');
+		$drones = $this->fitted->where('inv_group.inv_category.categoryName', 'Drone');
 
 		$racks = ['high', 'low', 'med', 'rig', 'subsystem'];
 		foreach ($racks as $rack) {
@@ -132,6 +131,10 @@ class Fit extends Model
 
 	public function getDronesAttribute() {
 		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
+	}
+
+	public function rearrange() {
+		
 	}
 
 }
