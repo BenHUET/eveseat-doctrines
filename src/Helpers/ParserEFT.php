@@ -77,6 +77,7 @@ class ParserEFT
 		$qty = 1;
 		$item = $line;
 		$charge = null;
+		$item_state = $state;
 
 		if (strpos($line, ',') !== false) {
 			$parts = explode(',', $line);
@@ -105,19 +106,23 @@ class ParserEFT
 
 		for ($i = 0; $i < count($queries); $i++) {
 			$query = $queries[$i];
+			$item_state = $state;
 
-			if ($i == 1) { // If charge
+			if ($i == 1) { // If loaded charge
 				$module_capacity = $queries[0]->capacity;
 				$charge_volume = $query->volume;
 				$qty = $module_capacity / $charge_volume;
 			}
+
+			if ($query->inv_group->inv_category->categoryName == 'Charge')
+				$item_state = 'on-board';
 
 			if (self::$fit->inv_types()->find($query->typeID)) {
 				$current_qty = self::$fit->inv_types()->find($query->typeID)->pivot->qty;
 				self::$fit->inv_types()->updateExistingPivot($query->typeID, ['qty' => ($qty + $current_qty)]);
 			}
 			else {
-				self::$fit->inv_types()->attach($query->typeID, ['state' => $state, 'qty' => $qty]);
+				self::$fit->inv_types()->attach($query->typeID, ['state' => $item_state, 'qty' => $qty]);
 			}
 		}
 	}

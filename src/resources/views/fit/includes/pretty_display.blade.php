@@ -46,7 +46,7 @@
 
 		<div role="tabpanel" class="tab-pane" id="cargo">
 			<div class="well">
-				@foreach ($fit->on_board as $item)
+				@foreach ($fit->on_board_sorted as $item)
 					<span class="on-board-item">
 						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="img-circle eve-icon medium-icon" />
 						{{ $item->pivot->qty }}x {{ $item->typeName }}

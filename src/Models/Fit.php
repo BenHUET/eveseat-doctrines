@@ -43,6 +43,14 @@ class Fit extends Model
 					->withPivot('qty');
 	}
 
+	public function getOnBoardSortedAttribute() {
+		return $this->on_board->sortBy(function ($item, $key) { 
+				return $this->sortItems($item, $key);
+			})
+			->values()
+			->all();
+	}
+
 	public function getLayoutAttribute()
 	{
 		$layout = [
@@ -164,6 +172,33 @@ class Fit extends Model
 				}
 			}
 		}
+	}
+
+	private function sortItems($item, $key) {
+		$category = $item->inv_group->inv_category->categoryName;
+
+		if ($category == 'Module' || $category == 'Subsystem') {
+			if ($item->slot) {
+				if ($item->slot == 'high')
+					return 1;
+				if ($item->slot == 'med')
+					return 2;
+				if ($item->slot == 'low')
+					return 3;
+				if ($item->slot == 'subsystem')
+					return 4;
+				if ($item->slot == 'rig')
+					return 5;
+			}
+		} 
+		else if ($category = 'Drone') {
+			return 6;
+		}
+		else if ($category = 'Charge') {
+			return 7;
+		}
+
+		return 8;
 	}
 
 }
