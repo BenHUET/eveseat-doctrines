@@ -29,6 +29,10 @@
 	z-index: 3;
 }
 
+#pretty_display .on-board-item {
+	display: block;
+}
+
 #pretty_display .high {
 	background-color: #2d6919;
 }

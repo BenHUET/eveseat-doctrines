@@ -41,7 +41,7 @@ class ParserEFT
 		self::$fit->rearrange();
 
 		self::$fit->sane = true;
-		self::$fit->save();
+		self::$fit->push();
 
 		return self::$fit;
 	}

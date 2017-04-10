@@ -1,16 +1,14 @@
 <?php $fitted_count = 0 ?>
-@foreach ($fit->inv_types as $item)
-	@if ($item->pivot->state == 'fitted')
-		@if($item->slot == $rack)
-			@for ($qty = 0; $qty < $item->pivot->qty; $qty++)
-				@if ($fitted_count < $fit->layout->get($rack))
-					<div class="item {{ $rack }} {{ $rack . ($fitted_count + 1) }}" data-toggle="tooltip" data-placement="top" title="{{ $item->typeName }}">
-						<img class="fitted" src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" >
-					</div>
-					<?php $fitted_count++ ?>
-				@endif
-			@endfor
-		@endif
+@foreach ($fit->fitted as $item)
+	@if($item->slot == $rack)
+		@for ($qty = 0; $qty < $item->pivot->qty; $qty++)
+			@if ($fitted_count < $fit->layout->get($rack))
+				<div class="item {{ $rack }} {{ $rack . ($fitted_count + 1) }}" data-toggle="tooltip" data-placement="top" title="{{ $item->typeName }}">
+					<img class="fitted" src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" >
+				</div>
+				<?php $fitted_count++ ?>
+			@endif
+		@endfor
 	@endif
 @endforeach
 

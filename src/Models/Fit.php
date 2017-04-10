@@ -18,6 +18,8 @@ class Fit extends Model
 		'comment'
 	];
 
+	private $racks = ['high', 'low', 'med', 'rig', 'subsystem'];
+
 	public function ship() {
 		return $this->belongsTo(InvType::class, 'ship_id', 'typeID');
 	}
@@ -29,15 +31,19 @@ class Fit extends Model
 
 	public function fitted() 
 	{
-		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')->wherePivot('state', 'fitted')->withPivot('qty');
+		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')
+					->where('state', 'fitted')
+					->withPivot('qty');
 	}
 
 	public function on_board() 
 	{
-		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')->wherePivot('state', 'on-board')->withPivot('qty');
+		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')
+					->wherePivot('state', 'on-board')
+					->withPivot('qty');
 	}
 
-	public function getLayoutAttribute() 
+	public function getLayoutAttribute()
 	{
 		$layout = [
 			'high' => 0,
@@ -86,8 +92,7 @@ class Fit extends Model
 		$charges = $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge');
 		$drones = $this->fitted->where('inv_group.inv_category.categoryName', 'Drone');
 
-		$racks = ['high', 'low', 'med', 'rig', 'subsystem'];
-		foreach ($racks as $rack) {
+		foreach ($this->racks as $rack) {
 			$lines[] = '';
 			for ($i = 0; $i < $this->layout->get($rack); $i++) {
 				foreach ($modules as $module) {
@@ -133,8 +138,32 @@ class Fit extends Model
 		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
 	}
 
+	// Swap extra modules/subsystems/rigs to cargo
 	public function rearrange() {
+		foreach ($this->racks as $rack) {
+			$slot_count = $this->layout->get($rack);
+			$modules = $this->fitted->where('slot', $rack);
+			$kept = 0;
+			
+			foreach ($modules as $module) {
+				if ($kept < $slot_count) {
+					if ($module->pivot->qty + $kept <= $slot_count) {
+						$kept += $module->pivot->qty;
+					}
+					else {
+						$qtyToSwap = min($module->pivot->qty - $slot_count - $kept, $slot_count - $kept);
 
+						$this->inv_types()->updateExistingPivot($module->typeID, ['state' => 'fitted', 'qty' => $module->pivot->qty - $qtyToSwap]);
+						$this->inv_types()->attach($module->typeID, ['state' => 'on-board', 'qty' => $qtyToSwap]);
+
+						$kept += $module->pivot->qty;
+					}
+				}
+				else {
+					$this->inv_types()->updateExistingPivot($module->typeID, ['state' => 'on-board']);
+				}
+			}
+		}
 	}
 
 }

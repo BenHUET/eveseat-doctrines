@@ -47,11 +47,10 @@
 		<div role="tabpanel" class="tab-pane" id="cargo">
 			<div class="well">
 				@foreach ($fit->on_board as $item)
-					{{ $item->typeName }}
-					@if ($item->pivot->qty > 1)
-						x{{ $item->pivot->qty }}
-					@endif
-					<br>
+					<span class="on-board-item">
+						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="img-circle eve-icon medium-icon" />
+						{{ $item->pivot->qty }}x {{ $item->typeName }}
+					</span>
 				@endforeach
 			</div>
 		</div>
