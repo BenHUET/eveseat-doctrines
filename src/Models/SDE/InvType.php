@@ -49,6 +49,12 @@ class InvType extends Model
 		else if ($category == 'Subsystem') {
 			return 'subsystem';
 		}
+		else if ($category == 'Drone') {
+			return 'drone';
+		}
+		else if ($category == 'Charge') {
+			return 'charge';
+		}
 
 		return null;
 	}

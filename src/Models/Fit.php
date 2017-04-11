@@ -26,25 +26,29 @@ class Fit extends Model
 
 	public function inv_types()
 	{
-		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')->withPivot('state', 'qty');
+		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type', 'fit_id', 'inv_type_id')->withPivot('qty', 'state');
 	}
 
 	public function fitted() 
 	{
-		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')
-					->where('state', 'fitted')
-					->withPivot('qty');
+		return $this->inv_types()->wherePivot('state', 'fitted');
 	}
 
 	public function on_board() 
 	{
-		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type')
-					->wherePivot('state', 'on-board')
-					->withPivot('qty');
+		return $this->inv_types()->wherePivot('state', 'on-board');
 	}
 
 	public function getOnBoardSortedAttribute() {
-		return $this->on_board->sortBy(function ($item, $key) { 
+		return $this->on_board()->get()->sortBy(function ($item, $key) { 
+				return $this->sortItems($item, $key);
+			})
+			->values()
+			->all();
+	}
+
+	public function getFittedSortedAttribute() {
+		return $this->fitted()->get()->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
 			})
 			->values()
@@ -96,23 +100,23 @@ class Fit extends Model
 
 		$lines[] = $header;
 
-		$modules = $this->fitted->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
-		$charges = $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge');
-		$drones = $this->fitted->where('inv_group.inv_category.categoryName', 'Drone');
+		$modules = $this->fitted()->get()->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
+		$charges = $this->on_board()->get()->where('inv_group.inv_category.categoryName', 'Charge');
+		$drones = $this->fitted()->get()->where('inv_group.inv_category.categoryName', 'Drone');
 
 		foreach ($this->racks as $rack) {
-			$lines[] = '';
 			for ($i = 0; $i < $this->layout->get($rack); $i++) {
-				foreach ($modules as $module) {
-					if ($module->slot == $rack) {
-						for ($qty = 0; $qty < $module->pivot->qty; $qty++) {
-							$lines[] = $module->typeName;
-						}
-						$modules = $modules->except([$module->typeID]);
-						break;
+				foreach ($modules->where('slot', $rack) as $module) {
+					for ($qty = 0; $qty < $module->pivot->qty; $qty++) {
+						$lines[] = $module->typeName;
 					}
+
+					$modules = $modules->except([$module->typeID]);
+					break;
 				}
 			}
+
+			$lines[] = '';
 		}
 
 		foreach ($drones as $drone) {

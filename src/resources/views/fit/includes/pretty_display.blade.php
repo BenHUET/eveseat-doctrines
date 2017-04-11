@@ -1,15 +1,33 @@
 <div id="pretty_display">
 
-	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active"><a href="#fitting" aria-controls="fitting" role="tab" data-toggle="tab">Fitting</a></li>
-		<li role="presentation"><a href="#cargo" aria-controls="cargo" role="tab" data-toggle="tab">Cargo</a></li>
-		<li role="presentation"><a href="#multibuy" aria-controls="multibuy" role="tab" data-toggle="tab">Multibuy</a></li>
-		<li role="presentation"><a href="#eft" aria-controls="eft" role="tab" data-toggle="tab">EFT</a></li>
+	<ul class="nav nav-pills"> 
+		<li role="presentation" class="dropdown active"> 
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+				Fitting <span class="caret"></span> 
+			</a>
+			<ul class="dropdown-menu"> 
+				<li class="active">
+					<a href="#fitting_pretty" aria-controls="fitting_pretty" role="tab" data-toggle="tab">Pretty</a>
+				</li> 
+				<li>
+					<a href="#fitting_list" aria-controls="fitting_list" role="tab" data-toggle="tab">List</a>
+				</li> 
+			</ul> 
+		</li>
+		<li role="presentation">
+			<a href="#cargo" aria-controls="cargo" role="tab" data-toggle="tab">Cargo</a>
+		</li> 
+		<li role="presentation">
+			<a href="#multibuy" aria-controls="multibuy" role="tab" data-toggle="tab">Multibuy</a>
+		</li>
+		<li role="presentation">
+			<a href="#eft" aria-controls="eft" role="tab" data-toggle="tab">EFT</a>
+		</li>
 	</ul>
 
 	<div class="tab-content">
 
-		<div role="tabpanel" class="tab-pane active" id="fitting">
+		<div role="tabpanel" class="tab-pane active" id="fitting_pretty">
 			<div class="well">
 				<div class="bg-circle">
 
@@ -31,7 +49,7 @@
 								@for ($i = 0; $i < 4 - $row; $i++)
 									<?php $drone = $drones->pop(); ?>
 									@if ($drone)
-										<div class="drone col-md-3 pull-right" data-toggle="tooltip" data-placement="top" title="{{ $drone->pivot->qty }}x {{ $drone->typeName }}">
+										<div class="drone-icon col-md-3 pull-right" data-toggle="tooltip" data-placement="top" title="{{ $drone->pivot->qty }}x {{ $drone->typeName }}">
 											<img class="drone-img" src="http://image.eveonline.com/Type/{{ $drone->typeID }}_64.png">
 										</div>
 									@endif
@@ -44,11 +62,27 @@
 			</div>
 		</div>
 
+		<div role="tabpanel" class="tab-pane" id="fitting_list">
+			<div class="well">
+				<?php $displayed = array(); ?>
+				@foreach ($fit->fitted_sorted as $item)
+					@if (!in_array($item->slot, $displayed))
+						<span class="slot-separator {{ $item->slot }}">{{ $item->slot }}S</span>
+						<?php $displayed[] = $item->slot; ?>
+					@endif
+					<span class="list-item">
+						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="eve-icon medium-icon" />
+						{{ $item->pivot->qty }}x {{ $item->typeName }}
+					</span>
+				@endforeach
+			</div>
+		</div>
+
 		<div role="tabpanel" class="tab-pane" id="cargo">
 			<div class="well">
 				@foreach ($fit->on_board_sorted as $item)
-					<span class="on-board-item">
-						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="img-circle eve-icon medium-icon" />
+					<span class="list-item">
+						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="eve-icon medium-icon" />
 						{{ $item->pivot->qty }}x {{ $item->typeName }}
 					</span>
 				@endforeach
