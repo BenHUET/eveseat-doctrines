@@ -5,8 +5,16 @@
 
 @section('full')
 
+@if($err)
+	<div class="callout callout-danger">
+		<h4>Error</h4>
+		{{ trans('doctrines::notices.error_loading_fit') }} <br/>
+		{{ trans('doctrines::words.details') }} : "{{ $err }}"
+	</div>
+@endif
+
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-3">
 		<div class="box box-info">
 			<div class="box-header with-border">
 				<h3 class="box-title">{{ trans('doctrines::words.import') }} (EFT)</h3>
@@ -21,18 +29,14 @@
 
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane active" id="fitting_input">
-							<div class="well">
-								<div class="form-group">
-									<textarea class="form-control" spellcheck="false" rows="20" name="eft">@if ($raw_eft){{ $raw_eft }}@endif</textarea>
-								</div>
+							<div class="form-group">
+								<textarea class="form-control user-input" spellcheck="false" rows="20" wrap="off" name="eft" placeholder="{{ trans('doctrines::placeholders.create.fit.fiting') }}">@if ($raw_eft){{ $raw_eft }}@endif</textarea>
 							</div>
 						</div>
 
 						<div role="tabpanel" class="tab-pane" id="cargo_input">
-							<div class="well">
-								<div class="form-group">
-									<textarea class="form-control" spellcheck="false" rows="20" name="cargo">@if ($raw_cargo){{ $raw_cargo }}@endif</textarea>
-								</div>
+							<div class="form-group">
+								<textarea class="form-control user-input" spellcheck="false" rows="20" wrap="off" name="cargo" placeholder="{{ trans('doctrines::placeholders.create.fit.cargo') }}">@if ($raw_cargo){{ $raw_cargo }}@endif</textarea>
 							</div>
 						</div>
 					</div>
@@ -44,40 +48,39 @@
 		</div>
 	</div>
 
-	<div class="col-md-6">
-		<div id="box-preview" class="box box-info">
-			<div class="box-header with-border">
-				<h3 class="box-title">{{ trans('doctrines::words.preview') }}</h3>
-			</div>
-			<div class="box-body">
-				@if($err)
-					<div class="alert alert-danger">
-						{{ trans('doctrines::notices.error_loading_fit') }} <br/>
-						{{ trans('doctrines::words.details') }} : "{{ $err }}"
-					</div>
-				@else
-					@if($fit)
-						<h3>{{ $fit->ship->typeName }} | {{ $fit->name }}</h3>
-						@include('doctrines::fit.includes.pretty_display', ['fit' => $fit])
-					@else
-						<i>
-							{{ trans('doctrines::notices.no_fit_loaded') }}
-						</i>
-					@endif
-				@endif
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-12">
-		<div class="box box-info">
+	<div class="col-md-4">
+		@if($fit)
+			<div class="box box-info">
+		@else
+			<div class="box box-default">
+		@endif
 			<div class="box-header with-border">
 				<h3 class="box-title">{{ trans('doctrines::words.settings') }}</h3>
 			</div>
 			<div class="box-body">
 				<p>SETTINGS</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-5">
+		@if($fit)
+			<div class="box box-info">
+		@else
+			<div class="box box-default">
+		@endif
+			<div class="box-header with-border">
+				<h3 class="box-title">{{ trans('doctrines::words.preview') }}</h3>
+			</div>
+			<div class="box-body">
+				@if($fit)
+					<h3>{{ $fit->ship->typeName }} | {{ $fit->name }}</h3>
+					@include('doctrines::fit.includes.pretty_display', ['fit' => $fit])
+				@else
+					<i>
+						{{ trans('doctrines::notices.no_fit_loaded') }}
+					</i>
+				@endif
 			</div>
 		</div>
 	</div>

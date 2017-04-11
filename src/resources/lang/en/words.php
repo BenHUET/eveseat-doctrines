@@ -2,7 +2,7 @@
 
 return [
 
-'cargo' => 'cargo',
+'cargo' => 'Cargo',
 'copy' => 'Copy',
 'details' => 'Details',
 'fitting' => 'Fitting',

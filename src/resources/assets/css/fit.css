@@ -196,3 +196,10 @@
 	white-space: pre;
 	max-width: none;
 }
+
+textarea.user-input {
+	font-size: 8pt;
+	font-family: sans-serif;
+	background-color: whitesmoke;
+}
+
