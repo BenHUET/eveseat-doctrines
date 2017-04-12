@@ -26,7 +26,7 @@ class Fit extends Model
 
 	public function inv_types()
 	{
-		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type', 'fit_id', 'inv_type_id')->withPivot('qty', 'state');
+		return $this->belongsToMany(InvType::class, 'doctrines_fit_inv_type', 'fit_id', 'inv_type_id')->withPivot('id', 'qty', 'state');
 	}
 
 	public function fitted() 
@@ -153,22 +153,14 @@ class Fit extends Model
 			$kept = 0;
 			
 			foreach ($modules as $module) {
-				if ($kept < $slot_count) {
-					if ($module->pivot->qty + $kept <= $slot_count) {
-						$kept += $module->pivot->qty;
-					}
-					else {
-						$qtyToSwap = min($module->pivot->qty - $slot_count - $kept, $slot_count - $kept);
-
-						$this->inv_types()->updateExistingPivot($module->typeID, ['state' => 'fitted', 'qty' => $module->pivot->qty - $qtyToSwap]);
-						$this->inv_types()->attach($module->typeID, ['state' => 'on-board', 'qty' => $qtyToSwap]);
-
-						$kept += $module->pivot->qty;
-					}
+				if ($kept + 1 > $slot_count) {
+					// $module->pivot->state = "on-board";
+					$this->inv_types()
+						->newPivotStatement()
+						->where('id', $module->pivot->id)
+						->update(['state' => 'on-board']);
 				}
-				else {
-					$this->inv_types()->updateExistingPivot($module->typeID, ['state' => 'on-board']);
-				}
+				$kept++;
 			}
 		}
 	}

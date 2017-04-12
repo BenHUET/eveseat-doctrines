@@ -77,6 +77,8 @@ class CreateDoctrinesTables extends Migration
 		});
 
 		Schema::create('doctrines_fit_inv_type', function (Blueprint $table) {
+			$table->increments('id');
+			
 			$table->integer('fit_id')->unsigned()->nullable();
 			$table->integer('inv_type_id');
 

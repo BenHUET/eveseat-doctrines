@@ -28,7 +28,8 @@ class ParserEFT
 				$first = false;
 			}
 			else {
-				self::parseItem($line, 'fitted');
+				if (strpos($line, '[Empty') === false)
+					self::parseItem($line, 'fitted');
 			}
 		}
 
@@ -85,14 +86,15 @@ class ParserEFT
 			$charge = trim($parts[1]);
 		}
 
-		if (!$charge) {
-			$parts = explode('x', $item);
-			$last = $parts[count($parts) - 1];
-			if (is_numeric($last)) {
-				$qty = (int)$last;
-				$item = str_replace("x" . $last, "", $item);
-			}
+		$parts = explode('x', $item);
+		$last = $parts[count($parts) - 1];
+		if (is_numeric($last)) {
+			$qty = (int)$last;
+			$item = str_replace("x" . $last, "", $item);
 		}
+
+		if ($charge && $qty > 1)
+			throw new DoctrinesFitParseException("EFT bad format. Quantities and charges are not allowed on the same line. Line : '" . $line . "'");
 
 		$queries = array();
 
@@ -117,13 +119,13 @@ class ParserEFT
 			if ($query->inv_group->inv_category->categoryName == 'Charge')
 				$item_state = 'on-board';
 
-			if (self::$fit->inv_types()->find($query->typeID)) {
-				$current_qty = self::$fit->inv_types()->find($query->typeID)->pivot->qty;
-				self::$fit->inv_types()->updateExistingPivot($query->typeID, ['qty' => ($qty + $current_qty)]);
-			}
-			else {
-				self::$fit->inv_types()->attach($query->typeID, ['state' => $item_state, 'qty' => $qty]);
-			}
+			if ($qty > 1)
+				$item_state = 'on-board';
+
+			if ($query->inv_group->inv_category->categoryName == 'Drone' || $query->inv_group->inv_category->categoryName == 'Fighter')
+				$item_state = 'fitted';
+
+			self::$fit->inv_types()->attach($query->typeID, ['state' => $item_state, 'qty' => $qty]);
 		}
 	}
 
