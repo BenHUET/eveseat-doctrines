@@ -28,7 +28,8 @@ class FitController extends Controller
 
 		if (session()->has('fit')) {
 			try {
-				$fit = ParserEFT::Parse(session('fit'), session('cargo'));
+				$parsedFit = ParserEFT::Parse(session('fit'), session('cargo'));
+				$fit = Fit::find($parsedFit->id);
 			}
 			catch (DoctrinesFitParseException $e) {
 				$err = $e->getMessage();
@@ -43,7 +44,7 @@ class FitController extends Controller
 			session()->forget('fit');
 			session()->forget('cargo');
 
-			return response()->json($fit->fitted);
+			return response()->json($fit->on_board_sorted);
 		}
 
 		return view('doctrines::fit.create', [

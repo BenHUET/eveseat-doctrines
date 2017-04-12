@@ -39,19 +39,33 @@ class Fit extends Model
 		return $this->inv_types()->wherePivot('state', 'on-board');
 	}
 
-	public function getOnBoardSortedAttribute() {
-		return $this->on_board->sortBy(function ($item, $key) { 
+	public function getInvTypesSortedAttribute() {
+		return $this->inv_types->reduce(function ($carry, $item) {
+				return $this->reduceItems($carry, $item);
+			}, collect([]))
+			->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
 			})
-			->values()
 			->all();
 	}
 
 	public function getFittedSortedAttribute() {
-		return $this->fitted->sortBy(function ($item, $key) { 
+		return $this->fitted->reduce(function ($carry, $item) {
+				return $this->reduceItems($carry, $item);
+			}, collect([]))
+			->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
 			})
-			->values()
+			->all();
+	}
+
+	public function getOnBoardSortedAttribute() {
+		return $this->on_board->reduce(function ($carry, $item) {
+				return $this->reduceItems($carry, $item);
+			}, collect([]))
+			->sortBy(function ($item, $key) { 
+				return $this->sortItems($item, $key);
+			})
 			->all();
 	}
 
@@ -125,6 +139,10 @@ class Fit extends Model
 			$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
 		}
 
+		foreach ($this->on_board_sorted as $item) {
+			$lines[] = $item->typeName . ' x' . $item->pivot->qty;
+		}
+
 		return join(" \r\n", $lines);
 	}
 
@@ -133,7 +151,7 @@ class Fit extends Model
 
 		$lines[] = '1x ' . $this->ship->typeName;
 		
-		$items = $this->inv_types->all();
+		$items = $this->inv_types_sorted;
 		foreach($items as $item) {
 			$lines[] = $item->pivot->qty . 'x ' . $item->typeName;
 		}
@@ -190,6 +208,16 @@ class Fit extends Model
 		}
 
 		return 8;
+	}
+
+	private function reduceItems($carry, $item) {
+		if ($carry->where('typeID', '=', $item->typeID)->count() > 0) {
+			$carry->where('typeID', '=', $item->typeID)->first()->pivot->qty += $item->pivot->qty;
+			return $carry;
+		}
+		else {
+			return $carry->push($item);
+		}
 	}
 
 }
