@@ -45,8 +45,7 @@ class Fit extends Model
 			}, collect([]))
 			->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
-			})
-			->all();
+			});
 	}
 
 	public function getFittedSortedAttribute() {
@@ -55,8 +54,7 @@ class Fit extends Model
 			}, collect([]))
 			->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
-			})
-			->all();
+			});
 	}
 
 	public function getOnBoardSortedAttribute() {
@@ -65,8 +63,35 @@ class Fit extends Model
 			}, collect([]))
 			->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
-			})
-			->all();
+			});
+	}
+
+	public function getDronesAttribute() {
+		return $this->inv_types->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
+	}
+
+	public function getChargesAttribute() {
+		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge');
+	}
+
+	public function getDronesSortedAttribute() {
+		return $this->inv_types->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter'])
+			->reduce(function ($carry, $item) {
+				return $this->reduceItems($carry, $item);
+			}, collect([]))
+			->sortBy(function ($item, $key) { 
+				return $this->sortItems($item, $key);
+			});
+	}
+
+	public function getChargesSortedAttribute() {
+		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge')
+			->reduce(function ($carry, $item) {
+				return $this->reduceItems($carry, $item);
+			}, collect([]))
+			->sortBy(function ($item, $key) { 
+				return $this->sortItems($item, $key);
+			});
 	}
 
 	public function getLayoutAttribute()
@@ -111,36 +136,48 @@ class Fit extends Model
 		if ($this->name)
 			$header .= ', '  . $this->name;
 		$header .= ']';
-
 		$lines[] = $header;
 
 		$modules = $this->fitted->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
-		$charges = $this->on_board->where('inv_group.inv_category.categoryName', 'Charge');
-
 		foreach ($this->racks as $rack) {
 			$lines[] = '';
-			for ($i = 0; $i < $this->layout->get($rack); $i++) {
-				foreach ($modules->where('slot', $rack) as $module) {
-					for ($qty = 0; $qty < $module->pivot->qty; $qty++) {
-						$lines[] = $module->typeName;
-					}
 
-					$modules = $modules->except([$module->typeID]);
-					break;
+			$suitables = $modules->where('slot', $rack);
+			$suitables_count = $suitables->count();
+
+			for ($i = 0; $i < $this->layout->get($rack); $i++) {
+				if ($i < $suitables_count) {
+					$lines[] = $suitables->shift()->typeName;
+				}
+				else {
+					$lines[] = '[Empty ' . ucfirst($rack) . ' slot]';
 				}
 			}
 		}
 
-		foreach ($this->drones as $drone) {
-			$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
+		if ($this->drones_sorted) {
+			$lines[] = '';
+			foreach ($this->drones_sorted as $drone) {
+				$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
+			}
 		}
 
-		foreach ($charges as $charge) {
-			$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
+		if ($this->charges_sorted) {
+			$lines[] = '';
+			foreach ($this->charges_sorted as $charge) {
+				$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
+			}
 		}
 
-		foreach ($this->on_board_sorted as $item) {
-			$lines[] = $item->typeName . ' x' . $item->pivot->qty;
+		$cargo = $this->on_board_sorted;
+		if ($cargo) {
+			$lines[] = '';
+			foreach ($cargo as $item) {
+				if ($item->inv_group->inv_category != 'Charge' 
+					&& $item->inv_group->inv_category != 'Drone' 
+					&& $item->inv_group->inv_category != 'Fighter')
+					$lines[] = $item->typeName . ' x' . $item->pivot->qty;
+			}
 		}
 
 		return join(" \r\n", $lines);
@@ -157,10 +194,6 @@ class Fit extends Model
 		}
 
 		return join(" \r\n", $lines);
-	}
-
-	public function getDronesAttribute() {
-		return $this->inv_types->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
 	}
 
 	// Swap extra modules/subsystems/rigs to cargo
