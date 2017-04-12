@@ -40,7 +40,7 @@ class Fit extends Model
 	}
 
 	public function getOnBoardSortedAttribute() {
-		return $this->on_board()->get()->sortBy(function ($item, $key) { 
+		return $this->on_board->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
 			})
 			->values()
@@ -48,7 +48,7 @@ class Fit extends Model
 	}
 
 	public function getFittedSortedAttribute() {
-		return $this->fitted()->get()->sortBy(function ($item, $key) { 
+		return $this->fitted->sortBy(function ($item, $key) { 
 				return $this->sortItems($item, $key);
 			})
 			->values()
@@ -100,11 +100,11 @@ class Fit extends Model
 
 		$lines[] = $header;
 
-		$modules = $this->fitted()->get()->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
-		$charges = $this->on_board()->get()->where('inv_group.inv_category.categoryName', 'Charge');
-		$drones = $this->fitted()->get()->where('inv_group.inv_category.categoryName', 'Drone');
+		$modules = $this->fitted->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
+		$charges = $this->on_board->where('inv_group.inv_category.categoryName', 'Charge');
 
 		foreach ($this->racks as $rack) {
+			$lines[] = '';
 			for ($i = 0; $i < $this->layout->get($rack); $i++) {
 				foreach ($modules->where('slot', $rack) as $module) {
 					for ($qty = 0; $qty < $module->pivot->qty; $qty++) {
@@ -115,16 +115,11 @@ class Fit extends Model
 					break;
 				}
 			}
-
-			$lines[] = '';
 		}
 
-		foreach ($drones as $drone) {
+		foreach ($this->drones as $drone) {
 			$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
 		}
-
-		if ($drones)
-			$lines[] = '';
 
 		foreach ($charges as $charge) {
 			$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
@@ -147,7 +142,7 @@ class Fit extends Model
 	}
 
 	public function getDronesAttribute() {
-		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Drone');
+		return $this->inv_types->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
 	}
 
 	// Swap extra modules/subsystems/rigs to cargo
@@ -195,7 +190,7 @@ class Fit extends Model
 					return 5;
 			}
 		} 
-		else if ($category = 'Drone') {
+		else if ($category = 'Drone' || $category = 'Fighter') {
 			return 6;
 		}
 		else if ($category = 'Charge') {

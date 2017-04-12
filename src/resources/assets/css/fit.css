@@ -63,6 +63,9 @@
 #pretty_display .drone {
 	background-color: lightcoral;
 }
+#pretty_display .fighter {
+	background-color: #b32323;
+}
 
 #pretty_display .high1 {
 	transform: rotate(216deg) translate(540%) rotate(-216deg);

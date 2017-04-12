@@ -52,6 +52,9 @@ class InvType extends Model
 		else if ($category == 'Drone') {
 			return 'drone';
 		}
+		else if ($category == 'Fighter') {
+			return 'fighter';
+		}
 		else if ($category == 'Charge') {
 			return 'charge';
 		}
