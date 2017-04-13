@@ -48,6 +48,10 @@ class Fit extends Model
 		return $this->inv_types()->where('inv_group.inv_category.categoryName', 'Charge');
 	}
 
+	public function getImplantsAttribute() {
+		return $this->fitted()->where('inv_group.inv_category.categoryName', 'Implant');
+	}
+
 	public function getInvTypesSortedAttribute() {
 		return $this->getSortedCollection($this->inv_types(), 'inv_types');
 	}
@@ -66,6 +70,10 @@ class Fit extends Model
 
 	public function getChargesSortedAttribute() {
 		return $this->on_board_sorted->where('inv_group.inv_category.categoryName', 'Charge');
+	}
+
+	public function getImplantsSortedAttribute() {
+		return $this->fitted_sorted->where('inv_group.inv_category.categoryName', 'Implant');
 	}
 
 	public function getLayoutAttribute()
@@ -130,24 +138,18 @@ class Fit extends Model
 			}
 		}
 
-		if ($this->drones_sorted->count() > 0) {
-			$lines[] = '';
-			foreach ($this->drones_sorted as $drone) {
-				$lines[] = $drone->typeName . ' x' . $drone->stack_qty;
+		foreach ([$this->drones_sorted, $this->charges_sorted, $this->implants_sorted] as $collection) {
+			if ($collection->count() > 0) {
+				$lines[] = '';
+				foreach ($collection as $item) {
+					$lines[] = $item->typeName . ' x' . $item->stack_qty;
+				}
 			}
 		}
 
-		if ($this->charges_sorted->count() > 0) {
+		if ($this->on_board_sorted) {
 			$lines[] = '';
-			foreach ($this->charges_sorted as $charge) {
-				$lines[] = $charge->typeName . ' x' . $charge->stack_qty;
-			}
-		}
-
-		$cargo = $this->on_board_sorted;
-		if ($cargo) {
-			$lines[] = '';
-			foreach ($cargo as $item) {
+			foreach ($this->on_board_sorted as $item) {
 				if ($item->inv_group->inv_category->categoryName != 'Charge' 
 					&& $item->inv_group->inv_category->categoryName != 'Drone' 
 					&& $item->inv_group->inv_category->categoryName != 'Fighter')
@@ -206,15 +208,18 @@ class Fit extends Model
 				if ($item['slot'] == 'rig')
 					return 5;
 			}
-		} 
+		}
 		else if ($category = 'Drone' || $category = 'Fighter') {
 			return 6;
 		}
 		else if ($category = 'Charge') {
 			return 7;
 		}
+		else if ($category = 'Implant') {
+			return 8;
+		}
 
-		return 8;
+		return 9;
 	}
 
 	private function getSortedCollection($input, $identifier) {

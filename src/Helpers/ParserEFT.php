@@ -119,11 +119,11 @@ class ParserEFT
 			if ($qty > 1)
 				$item_state = 'on-board';
 
-			if ($query->inv_group->inv_category->categoryName == 'Drone' || $query->inv_group->inv_category->categoryName == 'Fighter')
+			if (in_array($query->inv_group->inv_category->categoryName, ['Drone', 'Fighter', 'Implant']))
 				$item_state = 'fitted';
 
 			if ($state == 'fitted'
-					&& !in_array($query->inv_group->inv_category->categoryName, ['Module', 'Subsystem', 'Fighter', 'Drone', 'Charge']))
+					&& !in_array($query->inv_group->inv_category->categoryName, ['Module', 'Subsystem', 'Fighter', 'Drone', 'Implant']))
 				$item_state = 'on-board';
 
 			self::$fit->inv_types()->attach($query->typeID, ['state' => $item_state, 'qty' => $qty]);

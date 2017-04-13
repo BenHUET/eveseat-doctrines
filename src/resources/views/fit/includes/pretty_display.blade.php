@@ -40,23 +40,18 @@
 					@if ($fit->layout->get('subsystem') > 0)
 						@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'subsystem'])
 					@endif
-
-					<div class="drones">
-						<?php $drones = $fit->drones_sorted; ?>
-						@for ($row = 0; $row < 4; $row++)
-							<div class="row">
-								{{-- can't chunk! https://github.com/laravel/framework/issues/6281 --}}
-								@for ($i = 0; $i < 4 - $row; $i++)
-									<?php $drone = $drones->pop(); ?>
-									@if ($drone)
-										<div class="drone-icon col-md-3 pull-right" data-toggle="tooltip" data-placement="top" title="{{ $drone->pivot->qty }}x {{ $drone->typeName }}">
-											<img class="drone-img" src="http://image.eveonline.com/Type/{{ $drone->typeID }}_64.png">
-										</div>
-									@endif
-								@endfor
-							</div>
-						@endfor
-					</div>
+					@include('doctrines::fit.includes.pretty_display_corner', [
+						'outside_div_class' => 'drones', 
+						'inside_div_class' => 'drone-icon col-md-3 pull-right',
+						'img_class' => 'drone-img',
+						'collection' => $fit->drones_sorted
+					])
+					@include('doctrines::fit.includes.pretty_display_corner', [
+						'outside_div_class' => 'implants', 
+						'inside_div_class' => 'implant-icon col-md-3 pull-left',
+						'img_class' => 'implant-img',
+						'collection' => $fit->implants_sorted
+					])
 
 				</div>
 			</div>

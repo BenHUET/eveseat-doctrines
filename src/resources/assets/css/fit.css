@@ -66,6 +66,9 @@
 #pretty_display .fighter {
 	background-color: #b32323;
 }
+#pretty_display .implant {
+	background-color: #61c5ff;
+}
 
 #pretty_display .high1 {
 	transform: rotate(216deg) translate(540%) rotate(-216deg);
@@ -174,11 +177,11 @@
 	position: relative;
 	z-index: 4;
 }
-
 #pretty_display .empty {
     background-color: #333;
     border: 2px solid #aaa;
 }
+
 #pretty_display .drones {
 	position: absolute;
 	width: 20%;
@@ -192,6 +195,22 @@
 #pretty_display .drone-img {
 	width: 100%;
 	border: 1px solid lightcoral;
+}
+
+#pretty_display .implants {
+	position: absolute;
+	width: 20%;
+	left: 0px;
+	top: 0px;
+}
+#pretty_display .implant-icon {
+	padding: 2px;
+	margin: 0;
+}
+#pretty_display .implant-img {
+	width: 100%;
+	border: 1px solid #61c5ff;
+	background-color: #ffffff;
 }
 
 /* http://stackoverflow.com/a/24006318 */

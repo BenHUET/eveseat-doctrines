@@ -55,6 +55,9 @@ class InvType extends Model
 		else if ($category == 'Fighter') {
 			return 'fighter';
 		}
+		else if ($category == 'Implant') {
+			return 'implant';
+		}
 		else if ($category == 'Charge') {
 			return 'charge';
 		}
