@@ -209,13 +209,13 @@ class Fit extends Model
 					return 5;
 			}
 		}
-		else if ($category = 'Drone' || $category = 'Fighter') {
+		else if ($category == 'Drone' || $category == 'Fighter') {
 			return 6;
 		}
-		else if ($category = 'Charge') {
+		else if ($category == 'Charge') {
 			return 7;
 		}
-		else if ($category = 'Implant') {
+		else if ($category == 'Implant') {
 			return 8;
 		}
 

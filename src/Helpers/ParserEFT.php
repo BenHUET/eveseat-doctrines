@@ -126,6 +126,10 @@ class ParserEFT
 					&& !in_array($query->inv_group->inv_category->categoryName, ['Module', 'Subsystem', 'Fighter', 'Drone', 'Implant']))
 				$item_state = 'on-board';
 
+			if ($query->inv_group->groupName == 'Booster')
+				$item_state = 'on-board';
+
+
 			self::$fit->inv_types()->attach($query->typeID, ['state' => $item_state, 'qty' => $qty]);
 		}
 	}
