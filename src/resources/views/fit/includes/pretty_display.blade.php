@@ -42,7 +42,7 @@
 					@endif
 
 					<div class="drones">
-						<?php $drones = $fit->drones; ?>
+						<?php $drones = $fit->drones_sorted; ?>
 						@for ($row = 0; $row < 4; $row++)
 							<div class="row">
 								{{-- can't chunk! https://github.com/laravel/framework/issues/6281 --}}
@@ -72,7 +72,7 @@
 					@endif
 					<span class="list-item">
 						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="eve-icon medium-icon" />
-						{{ $item->pivot->qty }}x {{ $item->typeName }}
+						{{ $item->stack_qty }}x {{ $item->typeName }}
 					</span>
 				@endforeach
 			</div>
@@ -83,7 +83,7 @@
 				@foreach ($fit->on_board_sorted as $item)
 					<span class="list-item">
 						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="eve-icon medium-icon" />
-						{{ $item->pivot->qty }}x {{ $item->typeName }}
+						{{ $item->stack_qty}}x {{ $item->typeName }}
 					</span>
 				@endforeach
 			</div>

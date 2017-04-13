@@ -116,10 +116,10 @@ class ParserEFT
 				$qty = $module_capacity / $charge_volume;
 			}
 
-			if ($query->inv_group->inv_category->categoryName == 'Charge')
+			if ($qty > 1)
 				$item_state = 'on-board';
 
-			if ($qty > 1)
+			if ($query->inv_group->inv_category->categoryName == 'Charge')
 				$item_state = 'on-board';
 
 			if ($query->inv_group->inv_category->categoryName == 'Drone' || $query->inv_group->inv_category->categoryName == 'Fighter')

@@ -2,6 +2,7 @@
 
 namespace Seat\Kassie\Doctrines\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 use Seat\Kassie\Doctrines\Models\SDE\InvType;
@@ -39,59 +40,32 @@ class Fit extends Model
 		return $this->inv_types()->wherePivot('state', 'on-board');
 	}
 
-	public function getInvTypesSortedAttribute() {
-		return $this->inv_types->reduce(function ($carry, $item) {
-				return $this->reduceItems($carry, $item);
-			}, collect([]))
-			->sortBy(function ($item, $key) { 
-				return $this->sortItems($item, $key);
-			});
-	}
-
-	public function getFittedSortedAttribute() {
-		return $this->fitted->reduce(function ($carry, $item) {
-				return $this->reduceItems($carry, $item);
-			}, collect([]))
-			->sortBy(function ($item, $key) { 
-				return $this->sortItems($item, $key);
-			});
-	}
-
-	public function getOnBoardSortedAttribute() {
-		return $this->on_board->reduce(function ($carry, $item) {
-				return $this->reduceItems($carry, $item);
-			}, collect([]))
-			->sortBy(function ($item, $key) { 
-				return $this->sortItems($item, $key);
-			});
-	}
-
 	public function getDronesAttribute() {
-		return $this->inv_types->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
+		return $this->fitted()->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
 	}
 
 	public function getChargesAttribute() {
-		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge');
+		return $this->inv_types()->where('inv_group.inv_category.categoryName', 'Charge');
+	}
+
+	public function getInvTypesSortedAttribute() {
+		return $this->getSortedCollection($this->inv_types(), 'inv_types');
+	}
+
+	public function getFittedSortedAttribute() {
+		return $this->getSortedCollection($this->fitted(), 'fitted');
+	}
+
+	public function getOnBoardSortedAttribute() {
+		return $this->getSortedCollection($this->on_board(), 'on_board');
 	}
 
 	public function getDronesSortedAttribute() {
-		return $this->inv_types->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter'])
-			->reduce(function ($carry, $item) {
-				return $this->reduceItems($carry, $item);
-			}, collect([]))
-			->sortBy(function ($item, $key) { 
-				return $this->sortItems($item, $key);
-			});
+		return $this->fitted_sorted->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
 	}
 
 	public function getChargesSortedAttribute() {
-		return $this->inv_types->where('inv_group.inv_category.categoryName', 'Charge')
-			->reduce(function ($carry, $item) {
-				return $this->reduceItems($carry, $item);
-			}, collect([]))
-			->sortBy(function ($item, $key) { 
-				return $this->sortItems($item, $key);
-			});
+		return $this->on_board_sorted->where('inv_group.inv_category.categoryName', 'Charge');
 	}
 
 	public function getLayoutAttribute()
@@ -140,10 +114,11 @@ class Fit extends Model
 
 		$modules = $this->fitted->whereIn('inv_group.inv_category.categoryName', ['Module', 'Subsystem']);
 		foreach ($this->racks as $rack) {
-			$lines[] = '';
-
 			$suitables = $modules->where('slot', $rack);
 			$suitables_count = $suitables->count();
+
+			if ($suitables_count > 0)
+				$lines[] = '';
 
 			for ($i = 0; $i < $this->layout->get($rack); $i++) {
 				if ($i < $suitables_count) {
@@ -155,17 +130,17 @@ class Fit extends Model
 			}
 		}
 
-		if ($this->drones_sorted) {
+		if ($this->drones_sorted->count() > 0) {
 			$lines[] = '';
 			foreach ($this->drones_sorted as $drone) {
-				$lines[] = $drone->typeName . ' x' . $drone->pivot->qty;
+				$lines[] = $drone->typeName . ' x' . $drone->stack_qty;
 			}
 		}
 
-		if ($this->charges_sorted) {
+		if ($this->charges_sorted->count() > 0) {
 			$lines[] = '';
 			foreach ($this->charges_sorted as $charge) {
-				$lines[] = $charge->typeName . ' x' . $charge->pivot->qty;
+				$lines[] = $charge->typeName . ' x' . $charge->stack_qty;
 			}
 		}
 
@@ -173,10 +148,10 @@ class Fit extends Model
 		if ($cargo) {
 			$lines[] = '';
 			foreach ($cargo as $item) {
-				if ($item->inv_group->inv_category != 'Charge' 
-					&& $item->inv_group->inv_category != 'Drone' 
-					&& $item->inv_group->inv_category != 'Fighter')
-					$lines[] = $item->typeName . ' x' . $item->pivot->qty;
+				if ($item->inv_group->inv_category->categoryName != 'Charge' 
+					&& $item->inv_group->inv_category->categoryName != 'Drone' 
+					&& $item->inv_group->inv_category->categoryName != 'Fighter')
+					$lines[] = $item->typeName . ' x' . $item->stack_qty;
 			}
 		}
 
@@ -190,7 +165,7 @@ class Fit extends Model
 		
 		$items = $this->inv_types_sorted;
 		foreach($items as $item) {
-			$lines[] = $item->pivot->qty . 'x ' . $item->typeName;
+			$lines[] = $item->stack_qty . 'x ' . $item->typeName;
 		}
 
 		return join(" \r\n", $lines);
@@ -205,7 +180,6 @@ class Fit extends Model
 			
 			foreach ($modules as $module) {
 				if ($kept + 1 > $slot_count) {
-					// $module->pivot->state = "on-board";
 					$this->inv_types()
 						->newPivotStatement()
 						->where('id', $module->pivot->id)
@@ -217,19 +191,19 @@ class Fit extends Model
 	}
 
 	private function sortItems($item, $key) {
-		$category = $item->inv_group->inv_category->categoryName;
+		$category = $item['inv_group']['inv_category']['categoryName'];
 
 		if ($category == 'Module' || $category == 'Subsystem') {
-			if ($item->slot) {
-				if ($item->slot == 'high')
+			if ($item['slot']) {
+				if ($item['slot'] == 'high')
 					return 1;
-				if ($item->slot == 'med')
+				if ($item['slot'] == 'med')
 					return 2;
-				if ($item->slot == 'low')
+				if ($item['slot'] == 'low')
 					return 3;
-				if ($item->slot == 'subsystem')
+				if ($item['slot'] == 'subsystem')
 					return 4;
-				if ($item->slot == 'rig')
+				if ($item['slot'] == 'rig')
 					return 5;
 			}
 		} 
@@ -243,14 +217,13 @@ class Fit extends Model
 		return 8;
 	}
 
-	private function reduceItems($carry, $item) {
-		if ($carry->where('typeID', '=', $item->typeID)->count() > 0) {
-			$carry->where('typeID', '=', $item->typeID)->first()->pivot->qty += $item->pivot->qty;
-			return $carry;
-		}
-		else {
-			return $carry->push($item);
-		}
+	private function getSortedCollection($input, $identifier) {
+		$collection = $input->select('*', DB::raw('sum(doctrines_fit_inv_type.qty) as stack_qty'))
+			->groupBy('typeID')
+			->get()
+			->sortBy(function ($item, $key) { return $this->sortItems($item, $key); });
+
+		return $collection;
 	}
 
 }
