@@ -13,4 +13,9 @@ class FitObserver
 	{
 		$fit->owner()->associate(auth()->user());
 	}
+
+	public function updating(Fit $fit)
+	{
+		$fit->updater()->associate(auth()->user());
+	}
 }

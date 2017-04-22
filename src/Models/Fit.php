@@ -47,6 +47,11 @@ class Fit extends Model
 		return $this->belongsTo(User::class);
 	}
 
+	public function updater()
+	{
+		return $this->belongsTo(User::class);
+	}
+
 	public function getDronesAttribute() {
 		return $this->fitted()->whereIn('inv_group.inv_category.categoryName', ['Drone', 'Fighter']);
 	}

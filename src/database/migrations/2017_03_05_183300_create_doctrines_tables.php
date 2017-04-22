@@ -74,6 +74,12 @@ class CreateDoctrinesTables extends Migration
 				->references('id')
 				->on('users')
 				->onDelete('set null');
+
+			$table->integer('updater_id')->unsigned()->nullable();
+			$table->foreign('updater_id')
+				->references('id')
+				->on('users')
+				->onDelete('set null');
 		});
 
 		Schema::create('doctrines_fit_inv_type', function (Blueprint $table) {
