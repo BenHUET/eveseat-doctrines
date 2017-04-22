@@ -43,11 +43,6 @@ class FitController extends Controller
 
 			session()->forget('fit');
 			session()->forget('cargo');
-
-			// $fit->fitted_sorted;
-			// $fit->fitted_sorted;
-			// $fit->fitted_sorted;
-			// return response()->json($fit->implants);
 		}
 
 		return view('doctrines::fit.create', [

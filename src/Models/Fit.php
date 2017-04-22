@@ -4,9 +4,11 @@ namespace Seat\Kassie\Doctrines\Models;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
+use Seat\Web\Models\User;
 
 use Seat\Kassie\Doctrines\Models\SDE\InvType;
-
 use Seat\Kassie\Doctrines\Helpers\SDEHelper;
 
 class Fit extends Model
@@ -38,6 +40,11 @@ class Fit extends Model
 	public function on_board() 
 	{
 		return $this->inv_types()->wherePivot('state', 'on-board');
+	}
+
+	public function owner()
+	{
+		return $this->belongsTo(User::class);
 	}
 
 	public function getDronesAttribute() {

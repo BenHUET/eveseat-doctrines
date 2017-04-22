@@ -4,6 +4,9 @@ namespace Seat\Kassie\Doctrines;
 
 use Illuminate\Support\ServiceProvider;
 
+use Seat\Kassie\Doctrines\Models\Fit;
+use Seat\Kassie\Doctrines\Observers\FitObserver;
+
 class DoctrinesServiceProvider extends ServiceProvider
 {
 	public function boot()
@@ -13,6 +16,7 @@ class DoctrinesServiceProvider extends ServiceProvider
 		$this->addMigrations();
 		$this->addTranslations();
 		$this->addPublications();
+		$this->addObservers();
 	}
 
 	public function register()
@@ -41,11 +45,16 @@ class DoctrinesServiceProvider extends ServiceProvider
 		$this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'doctrines');
 	}
 
-	private function addPublications() 
+	private function addPublications()
 	{
 		$this->publishes([
 			__DIR__ . '/resources/assets/css' => public_path('web/css/kassie/doctrines'),
 			__DIR__ . '/resources/assets/js' => public_path('web/js/kassie/doctrines')
 		]);
+	}
+
+	private function addObservers() 
+	{
+		Fit::observe(FitObserver::class);
 	}
 }
