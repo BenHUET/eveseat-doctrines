@@ -16,8 +16,7 @@ class Fit extends Model
 	protected $table = 'doctrines_fits';
 	protected $fillable = [
 		'name',
-		'published',
-		'sane',
+		'status',
 		'comment'
 	];
 

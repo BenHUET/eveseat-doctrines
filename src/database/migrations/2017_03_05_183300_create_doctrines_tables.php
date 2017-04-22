@@ -53,7 +53,6 @@ class CreateDoctrinesTables extends Migration
 			$table->string('name');
 			$table->longText('comment')->nullable();
 			$table->boolean('published')->default(false);
-			$table->boolean('sane')->default(false);
 
 			$table->softDeletes();
 			$table->timestamps();

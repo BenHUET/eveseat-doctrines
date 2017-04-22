@@ -3,9 +3,11 @@
 namespace Seat\Kassie\Doctrines;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
 
 use Seat\Kassie\Doctrines\Models\Fit;
 use Seat\Kassie\Doctrines\Observers\FitObserver;
+use Seat\Kassie\Doctrines\Commands\PurgeFit;
 
 class DoctrinesServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class DoctrinesServiceProvider extends ServiceProvider
 		$this->addTranslations();
 		$this->addPublications();
 		$this->addObservers();
+		$this->addCommands();
 	}
 
 	public function register()
@@ -56,5 +59,12 @@ class DoctrinesServiceProvider extends ServiceProvider
 	private function addObservers() 
 	{
 		Fit::observe(FitObserver::class);
+	}
+
+	private function addCommands() 
+	{
+		$this->commands([
+			PurgeFit::class,
+		]);
 	}
 }
