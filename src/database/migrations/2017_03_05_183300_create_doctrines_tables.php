@@ -58,9 +58,6 @@ class CreateDoctrinesTables extends Migration
 			$table->timestamps();
 
 			$table->integer('ship_id');
-			$table->foreign('ship_id')
-				  ->references('typeID')
-				  ->on('invTypes');
 
 			$table->integer('category_id')->unsigned()->nullable();
 			$table->foreign('category_id')
@@ -94,10 +91,6 @@ class CreateDoctrinesTables extends Migration
 				  ->references('id')
 				  ->on('doctrines_fits')
 				  ->onDelete('set null');
-			
-			$table->foreign('inv_type_id')
-				  ->references('typeID')
-				  ->on('invTypes');
 		});
 
 		Schema::create('doctrines_doctrine_fit', function (Blueprint $table) {
