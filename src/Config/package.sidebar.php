@@ -12,47 +12,19 @@ return [
 				'name'  => 'Doctrines',
 				'icon'  => 'fa-cube',
 				'route' => 'doctrines.doctrine.index',
-				'permission' => 'doctrines.view',
-				'entries' => [
-					[
-						'name'  => 'All',
-						'icon'  => 'fa-th-list',
-						'route' => 'doctrines.doctrine.index',
-						'permission' => 'doctrines.view'
-					],
-					[
-						'name'  => 'Create',
-						'icon'  => 'fa-plus',
-						'route' => 'doctrines.doctrine.indexStore',
-						'permission' => 'doctrines.createDoctrine'
-					]
-				]
+				'permission' => 'doctrines.view'
 			],
 			[
 				'name'  => 'Fits',
 				'icon'  => 'fa-space-shuttle',
 				'route' => 'doctrines.fit.index',
-				'permission' => 'doctrines.view',
-				'entries' => [
-					[
-						'name'  => 'All',
-						'icon'  => 'fa-th-list',
-						'route' => 'doctrines.fit.index',
-						'permission' => 'doctrines.view'
-					],
-					[
-						'name'  => 'Create',
-						'icon'  => 'fa-plus',
-						'route' => 'doctrines.fit.indexStore',
-						'permission' => 'doctrines.createFit'
-					]
-				]
+				'permission' => 'doctrines.view'
 			],
 			[
-				'name'  => 'Settings',
+				'name'  => 'Manage',
 				'icon'  => 'fa-cog',
-				'route' => 'doctrines.doctrine.index',
-				'permission' => 'doctrines.setup'
+				'route' => 'doctrines.dashboard.index',
+				'permission' => 'doctrines.viewDashboard'
 			]
 		]
 	]
