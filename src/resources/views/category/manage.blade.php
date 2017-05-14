@@ -1,7 +1,7 @@
 @extends('web::layouts.grids.6-6')
 
-@section('title', trans('doctrines::meta.plugin_name') . ' | ' . trans('doctrines::meta.title_manage_category'))
-@section('page_header', trans('doctrines::meta.title_manage_category'))
+@section('title', trans('doctrines::meta.plugin_name') . ' | ' . trans('doctrines::meta.title.category.manage'))
+@section('page_header', trans('doctrines::meta.title.category.manage'))
 
 @section('left')
 
