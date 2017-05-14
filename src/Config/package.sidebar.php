@@ -19,8 +19,8 @@ return [
 				'route' => 'doctrines.fit.index'
 			],
 			[
-				'name'  => 'Manage',
-				'icon'  => 'fa-cog',
+				'name'  => 'Dashboard',
+				'icon'  => 'fa-dashboard',
 				'route' => 'doctrines.dashboard.index',
 				'permission' => 'doctrines.viewDashboard'
 			]

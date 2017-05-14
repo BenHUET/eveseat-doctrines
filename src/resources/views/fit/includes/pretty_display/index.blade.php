@@ -33,20 +33,20 @@
 
 					<img class="ship" src="http://image.eveonline.com/Render/{{ $fit->ship->typeID }}_512.png">
 
-					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'high'])
-					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'med'])
-					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'low'])
-					@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'rig'])
+					@include('doctrines::fit.includes.pretty_display.rack', ['rack' => 'high'])
+					@include('doctrines::fit.includes.pretty_display.rack', ['rack' => 'med'])
+					@include('doctrines::fit.includes.pretty_display.rack', ['rack' => 'low'])
+					@include('doctrines::fit.includes.pretty_display.rack', ['rack' => 'rig'])
 					@if ($fit->layout->get('subsystem') > 0)
-						@include('doctrines::fit.includes.pretty_display_rack', ['rack' => 'subsystem'])
+						@include('doctrines::fit.includes.pretty_display.rack', ['rack' => 'subsystem'])
 					@endif
-					@include('doctrines::fit.includes.pretty_display_corner', [
+					@include('doctrines::fit.includes.pretty_display.corner', [
 						'outside_div_class' => 'drones', 
 						'inside_div_class' => 'drone-icon col-md-3 pull-right',
 						'img_class' => 'drone-img',
 						'collection' => $fit->drones_sorted
 					])
-					@include('doctrines::fit.includes.pretty_display_corner', [
+					@include('doctrines::fit.includes.pretty_display.corner', [
 						'outside_div_class' => 'implants', 
 						'inside_div_class' => 'implant-icon col-md-3 pull-left',
 						'img_class' => 'implant-img',
