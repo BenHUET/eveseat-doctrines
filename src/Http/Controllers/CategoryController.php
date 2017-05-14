@@ -13,7 +13,7 @@ class CategoryController extends Controller
 
 	public function manage()
 	{	
-		$categories = Category::all();
+		$categories = Category::all()->sortBy('name');
 		return view('doctrines::category.manage', [
 			'categories' => $categories
 		]);

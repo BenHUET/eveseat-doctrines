@@ -5,6 +5,7 @@ return [
 	'actions' => 'Actions',
 	'cancel' => 'Cancel',
 	'cargo' => 'Cargo',
+	'category' => 'Category',
 	'close' => 'Close',
 	'copy' => 'Copy',
 	'delete' => 'Delete',

@@ -8,7 +8,6 @@
 			<table class="table table-bordered table-hover">
 				<thead>
 					<tr>
-						<th class="th-fit text-center">#</th>
 						<th>{{ trans('doctrines::words.name') }}</th>
 						<th class="th-fit">{{ trans('doctrines::words.actions') }}</th>
 					</tr>
@@ -16,7 +15,6 @@
 				<tbody>
 					@foreach ($categories as $category)
 						<tr>
-							<td>{{ $category->id }}</td>
 							<td>{{ $category->name }}</td>
 							<td>
 								@include('doctrines::category.includes.manage.actions')

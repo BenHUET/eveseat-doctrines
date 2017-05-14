@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Seat\Web\Http\Controllers\Controller;
 
 use Seat\Kassie\Doctrines\Models\Fit;
+use Seat\Kassie\Doctrines\Models\Category;
 use Seat\Kassie\Doctrines\Exceptions\DoctrinesFitParseException;
 
 use Seat\Kassie\Doctrines\Helpers\ParserEFT;
@@ -45,11 +46,14 @@ class FitController extends Controller
 			session()->forget('cargo');
 		}
 
+		$categories = Category::all()->sortBy('name');
+
 		return view('doctrines::fit.create', [
 			'err' => $err,
 			'fit' => $fit,
 			'raw_eft' => $raw_eft,
-			'raw_cargo' => $raw_cargo
+			'raw_cargo' => $raw_cargo,
+			'categories' => $categories
 		]);
 	}
 

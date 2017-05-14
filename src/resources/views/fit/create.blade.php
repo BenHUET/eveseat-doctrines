@@ -13,19 +13,23 @@
 	</div>
 @endif
 
-<div class="row">
-	<div class="col-md-3">
-		@include('doctrines::fit.includes.create.import', ['fit' => $fit])
-	</div>
+@if ($categories->count() == 0)
+	<i>{{ trans('doctrines::notices.no_category') }}</i>
+@else
+	<div class="row">
+		<div class="col-md-3">
+			@include('doctrines::fit.includes.create.import', ['fit' => $fit])
+		</div>
 
-	<div class="col-md-4">
-		@include('doctrines::fit.includes.create.settings', ['fit' => $fit])
-	</div>
+		<div class="col-md-4">
+			@include('doctrines::fit.includes.create.settings', ['fit' => $fit])
+		</div>
 
-	<div class="col-md-5">
-		@include('doctrines::fit.includes.create.preview', ['fit' => $fit])
+		<div class="col-md-5">
+			@include('doctrines::fit.includes.create.preview', ['fit' => $fit])
+		</div>
 	</div>
-</div>
+@endif
 
 @stop
 
