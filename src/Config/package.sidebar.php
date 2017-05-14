@@ -6,19 +6,17 @@ return [
 		'label'         => 'doctrines::meta.plugin_name',
 		'icon'          => 'fa-cubes',
 		'route_segment' => 'doctrines',
-		'permission' => 'doctrines.view',
+		'permission' => 'doctrines.access',
 		'entries' => [
 			[
 				'name'  => 'Doctrines',
 				'icon'  => 'fa-cube',
-				'route' => 'doctrines.doctrine.index',
-				'permission' => 'doctrines.view'
+				'route' => 'doctrines.doctrine.index'
 			],
 			[
 				'name'  => 'Fits',
 				'icon'  => 'fa-space-shuttle',
-				'route' => 'doctrines.fit.index',
-				'permission' => 'doctrines.view'
+				'route' => 'doctrines.fit.index'
 			],
 			[
 				'name'  => 'Manage',

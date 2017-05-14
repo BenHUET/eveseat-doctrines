@@ -2,7 +2,7 @@
 
 return [
     'doctrines' => [
-		'view',
+		'access',
 		'viewNotPublished',
 		'viewDashboard',
 		'manageDoctrine',

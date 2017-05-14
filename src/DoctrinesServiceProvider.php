@@ -25,7 +25,7 @@ class DoctrinesServiceProvider extends ServiceProvider
 	public function register()
 	{
 		$this->mergeConfigFrom(__DIR__ . '/Config/package.sidebar.php', 'package.sidebar');
-		$this->mergeConfigFrom(__DIR__ . '/Config/calendar.permissions.php', 'web.permissions');
+		$this->mergeConfigFrom(__DIR__ . '/Config/doctrines.permissions.php', 'web.permissions');
 	}
 
 	private function addRoutes()

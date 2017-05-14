@@ -44,7 +44,6 @@ class CreateDoctrinesTables extends Migration
 			$table->increments('id');
 
 			$table->string('name');
-			$table->longText('comment')->nullable();
 		});
 
 		Schema::create('doctrines_fits', function (Blueprint $table) {

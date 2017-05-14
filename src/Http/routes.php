@@ -2,7 +2,7 @@
 
 Route::group([
 	'namespace' => 'Seat\Kassie\Doctrines\Http\Controllers',
-	'middleware' => ['web', 'bouncer:doctrines.view'],
+	'middleware' => ['web', 'bouncer:doctrines.access'],
 	'prefix' => 'doctrines'
 ], function () {
 
@@ -34,30 +34,54 @@ Route::group([
 			'uses' => 'FitController@index',
 		]);
 
-		Route::get('create', [
-			'as' => 'doctrines.fit.indexStore',
-			'uses' => 'FitController@indexStore',
+		Route::group([
 			'middleware' => 'bouncer:doctrines.manageFit',
-		]);
+		], function() {
 
-		Route::post('createPreview', [
-			'as' => 'doctrines.fit.indexStorePreview',
-			'uses' => 'FitController@indexStorePreview',
-			'middleware' => 'bouncer:doctrines.manageFit',
-		]);
+			Route::get('create', [
+				'as' => 'doctrines.fit.indexStore',
+				'uses' => 'FitController@indexStore',
+			]);
+
+			Route::post('createPreview', [
+				'as' => 'doctrines.fit.indexStorePreview',
+				'uses' => 'FitController@indexStorePreview',
+			]);
+
+		});
 
 	});
 
 	// Categories (Fit)
 	Route::group([
-		'prefix' => 'category'
+		'prefix' => 'category',
 	], function() {
 
-		Route::get('index', [
-			'as' => 'doctrines.category.index',
-			'uses' => 'CategoryController@index',
+		Route::group([
 			'middleware' => 'bouncer:doctrines.manageCategory'
-		]);
+		], function() {
+
+			Route::get('manage', [
+				'as' => 'doctrines.category.manage',
+				'uses' => 'CategoryController@manage',
+			]);
+
+			Route::post('store', [
+				'as' => 'doctrines.category.store',
+				'uses' => 'CategoryController@store',
+			]);
+
+			Route::post('delete', [
+				'as' => 'doctrines.category.delete',
+				'uses' => 'CategoryController@delete',
+			]);
+
+			Route::post('update', [
+				'as' => 'doctrines.category.update',
+				'uses' => 'CategoryController@update',
+			]);
+
+		});
 
 	});
 
