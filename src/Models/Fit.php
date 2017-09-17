@@ -106,7 +106,7 @@ class Fit extends Model
 		$subsystems = $this->inv_types->where('pivot.state', 'fitted')->where('inv_group.inv_category.categoryName', 'Subsystem');
 
 		if ($subsystems->isNotEmpty()) {
-			$layout['subsystem'] = 5;
+			$layout['subsystem'] = 4;
 
 			foreach($subsystems as $subsystem) {
 				foreach([1374, 1375, 1376] as $id) {
