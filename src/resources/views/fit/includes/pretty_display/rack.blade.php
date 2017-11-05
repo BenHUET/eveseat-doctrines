@@ -3,9 +3,11 @@
 	@if($item->slot == $rack)
 		@for ($qty = 0; $qty < $item->pivot->qty; $qty++)
 			@if ($fitted_count < $fit->layout->get($rack))
-				<div class="item {{ $rack }} {{ $rack . ($fitted_count + 1) }}" data-toggle="tooltip" data-placement="top" title="{{ $item->typeName }}">
-					<img class="fitted" src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" >
-				</div>
+				<a href="https://o.smium.org/db/type/{{ $item->typeID }}" target="_blank">
+					<div class="item {{ $rack }} {{ $rack . ($fitted_count + 1) }}" data-toggle="tooltip" data-placement="top" title="{{ $item->typeName }}">
+						<img class="fitted" src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" >
+					</div>
+				</a>
 				<?php $fitted_count++ ?>
 			@endif
 		@endfor

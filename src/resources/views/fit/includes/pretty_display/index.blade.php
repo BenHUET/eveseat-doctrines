@@ -67,7 +67,7 @@
 					@endif
 					<span class="list-item">
 						<img src="http://image.eveonline.com/Type/{{ $item->typeID }}_64.png" class="eve-icon medium-icon" />
-						{{ $item->stack_qty }}x {{ $item->typeName }}
+						{{ $item->stack_qty }}x <a href="https://o.smium.org/db/type/{{ $item->typeID }}" target="_blank">{{ $item->typeName }}</a>
 					</span>
 				@endforeach
 			</div>

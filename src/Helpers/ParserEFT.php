@@ -22,6 +22,8 @@ class ParserEFT
 		$first = true;
 		/* http://stackoverflow.com/a/1462759 */
 		foreach(preg_split("/((\r?\n)|(\r\n?))/", $raw_fit) as $line) {
+			$line = trim(rtrim($line));
+
 			if ($first) {
 				self::parseHeader($line);
 				self::$fit->save();
