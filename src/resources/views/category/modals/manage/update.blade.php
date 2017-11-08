@@ -17,7 +17,7 @@
 					<div class="col-md-10">
 						<input type="text" class="form-control" name="name" id="name" placeholder="{{ trans('doctrines::placeholders.update.category.name') }}">
 					</div>
-
+				</br>
 			</div>
 			<div class="modal-footer">
 					<button type="button " class="btn btn-block" data-dismiss="modal">{{ trans('doctrines::words.cancel') }}</button>

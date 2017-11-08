@@ -11,7 +11,9 @@
 			<h3 class="box-title">{{ trans('doctrines::words.doctrines') }}</h3>
 		</div>
 		<div class="box-body">
-			
+			<a class="btn btn-default btn-block @if (!$permissions['doctrine']) disabled @endif" href="{{ route('doctrines.doctrine.indexStore') }}">
+				{{ trans('doctrines::actions.create.doctrine') }}
+			</a>
 		</div>
 		<div class="box-footer">
 

@@ -4,10 +4,13 @@ return [
 
 'create' => [
 	'category' => 'Create a new category',
-	'fit' => 'Create a new fitting'
+	'fit' => 'Create a new fitting',
+	'doctrine' => 'Create a new doctrine'
 ], 
 'manage' => [
-	'category' => 'Manage categories'
+	'category' => 'Manage categories',
+	'fit' => 'Manage fits',
+	'doctrine' => 'Manage doctrines'
 ],
 'delete' => [
 	'category' => [

@@ -7,6 +7,7 @@ return [
 	'cargo' => 'Cargo',
 	'category' => 'Category',
 	'close' => 'Close',
+	'comment' => 'Comment',
 	'copy' => 'Copy',
 	'delete' => 'Delete',
 	'details' => 'Details',
@@ -20,6 +21,7 @@ return [
 	'new' => 'New',
 	'preview' => 'Preview',
 	'settings' => 'Settings',
+	'submit' => 'Submit',
 	'update' => 'Update',
 	'yes' => 'Yes'
 

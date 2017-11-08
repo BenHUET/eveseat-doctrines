@@ -2,7 +2,7 @@
 	<div class="box-header with-border">
 		<h3 class="box-title">{{ trans('doctrines::words.import') }} (EFT)</h3>
 	</div>
-	<form id="form_fit_create_load"  method="POST" action="{{ route('doctrines.fit.indexStorePreview') }}">
+	<form id="form_fit_create_load" method="POST" action="{{ route('doctrines.fit.indexStorePreview') }}">
 		{{ csrf_field() }}
 		<div class="box-body">
 			<ul class="nav nav-tabs" role="tablist">
